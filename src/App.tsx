@@ -110,11 +110,11 @@ class App extends React.Component<{},IAppState> {
         return (<DisplayList type="groups" deleteData={this.deleteGroup} list={this.state.groups}/>)
     }
 
-    public deleteUser=(userId:number)=>{
+    public deleteUser=(userId:string)=>{
         appService.deleteUser(userId);
     }
 
-    public deleteGroup=(groupId:number)=>{
+    public deleteGroup=(groupId:string)=>{
         appService.deleteGroup(groupId);
     }
 
@@ -130,14 +130,7 @@ class App extends React.Component<{},IAppState> {
 
     }
 
-    public newTest(children:any){
-        console.log(children);
-        return(<div>testing</div>);
-    }
-
     public editGroup = (props:any)=>{
-        // this.setState({children:props.location.state.children});
-        // return <EditGroup {...props} list={this.state.children}/>
         return (props.location.state?
                  <EditGroup {...props} list={props.location.state.children} users={this.state.users}/>:
                  <div/>)

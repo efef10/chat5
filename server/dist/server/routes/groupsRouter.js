@@ -6,6 +6,7 @@ var groupsRouter = express.Router();
 groupsRouter.get('/', controllers.getGroups);
 groupsRouter.get('/:groupId/connectors', controllers.getConnectors);
 groupsRouter.post('/:groupId', controllers.addGroup);
+groupsRouter.post('/:groupId/connectors', controllers.addConnector);
 groupsRouter.put('/:groupId', controllers.editGroup);
 groupsRouter.delete('/:groupId', controllers.deleteGroup);
 groupsRouter.delete('/:groupId/connectors/:childId', controllers.deleteConnector);

@@ -10,7 +10,7 @@ import {appService} from "../models/AppStore";
 
 interface IDisplayListProps{
     list:any;
-    deleteData(objId:number,item?:string):void
+    deleteData(objId:string,item?:string):void
     type:string
     groupId?:number
 }
@@ -41,7 +41,7 @@ class DisplayList extends React.Component<IDisplayListProps,IDisplayListState>{
     }
 
     calcChildren=(e:any,item:any)=>{
-        appService.allUsersOfGroup(Number(item.id)).then((children)=>{
+        appService.allUsersOfGroup(item.id).then((children)=>{
             this.setState({currentChildren:children});
         })
     }

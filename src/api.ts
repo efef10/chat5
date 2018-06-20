@@ -10,12 +10,12 @@ export class Api{
     }
 
 
-    static deleteUser(userId:number){
+    static deleteUser(userId:string){
         return this.delete(`/users/${userId}`,{type:"user"});
     }
 
-    static editUser(user:any){
-        return this.put('/users/'+user.id,user);
+    static editUser(userId:string,updates:{field:string,value:any}[]){
+        return this.put('/users/'+userId,updates);
     }
 
     /////////////////////////////////////////////
@@ -24,20 +24,24 @@ export class Api{
         return this.get('/groups');
     }
 
-    static addGroup(groupName:string,toGroupID:number){
+    static addGroup(groupName:string,toGroupID:string){
         return this.post('/groups/'+toGroupID,{name:groupName,type:"group"});
     }
 
-    static deleteGroup(groupId:number){
+    static deleteGroup(groupId:string){
         return this.delete(`/groups/${groupId}`,{type:"group"});
     }
 
-    static getConnectors(groupId:number){
+    static getConnectors(groupId:string){
         return this.get(`/groups/${groupId}/connectors`);
     }
 
-    static deleteConnector(groupId:number,childToDelete:{childId:number,type:string}){
+    static deleteConnector(groupId:string,childToDelete:{childId:string,type:string}){
         return this.delete(`/groups/${groupId}/connectors/${childToDelete.childId}`,{type:childToDelete.type});
+    }
+
+    static addConnector(connectorId:string,toGroupID:string,type:string){
+        return this.post(`/groups/${toGroupID}/connectors`,{connectorId:connectorId,type:type});
     }
 
     static get(url:string){

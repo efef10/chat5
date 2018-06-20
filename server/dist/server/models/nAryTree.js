@@ -38,6 +38,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var Group_1 = require("./Group");
 var User_1 = require("./User");
 var db_1 = require("../lib/db");
+var uniqid = require("uniqid");
 var groupsDB = new db_1.DB("groups");
 var groupsToUsersDB = new db_1.DB("userToGroups");
 var nAryTree = /** @class */ (function () {
@@ -69,7 +70,7 @@ var nAryTree = /** @class */ (function () {
         return !this.root;
         // return this.root === null;
     };
-    nAryTree.prototype.allGroups = function (arr, currentGroup) {
+    nAryTree.prototype.allGroups = function () {
         return __awaiter(this, void 0, void 0, function () {
             var groups;
             return __generator(this, function (_a) {
@@ -92,7 +93,7 @@ var nAryTree = /** @class */ (function () {
                         return [4 /*yield*/, groupsDB.initiate()];
                     case 1:
                         _a.sent();
-                        return [4 /*yield*/, groupsDB.addData({ id: new Date().getUTCMilliseconds(), type: "group", name: groupName, messages: [], parent: null, children: [] })];
+                        return [4 /*yield*/, groupsDB.addData({ id: uniqid(), type: "group", name: groupName, messages: [], parent: null, children: [] })];
                     case 2:
                         _a.sent();
                         return [4 /*yield*/, groupsDB.getData().then(function (data) {
@@ -108,7 +109,7 @@ var nAryTree = /** @class */ (function () {
     };
     nAryTree.prototype.addGroup = function (newGroupName, toGroupID) {
         return __awaiter(this, void 0, void 0, function () {
-            var newGroup, connector;
+            var newGroup, connectors, myConnectors, connector, _i, myConnectors_1, connector_1, newGroupOthers;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -118,11 +119,39 @@ var nAryTree = /** @class */ (function () {
                         _a.sent();
                         _a.label = 2;
                     case 2:
-                        newGroup = { type: "group", name: newGroupName, id: new Date().getUTCMilliseconds() };
+                        newGroup = { type: "group", name: newGroupName, id: uniqid() };
+                        return [4 /*yield*/, groupsToUsersDB.getData()];
+                    case 3:
+                        connectors = _a.sent();
+                        myConnectors = connectors.filter(function (connector) {
+                            return connector.parentId === toGroupID;
+                        });
                         groupsDB.addData(newGroup);
                         connector = { type: "group", parentId: toGroupID, childId: newGroup.id };
                         groupsToUsersDB.addData(connector);
-                        return [2 /*return*/];
+                        if (!(myConnectors.length > 0 && myConnectors[0].type === "user")) return [3 /*break*/, 5];
+                        for (_i = 0, myConnectors_1 = myConnectors; _i < myConnectors_1.length; _i++) {
+                            connector_1 = myConnectors_1[_i];
+                        }
+                        newGroupOthers = { type: "group", name: "others", id: uniqid() };
+                        return [4 /*yield*/, groupsDB.addData(newGroupOthers)];
+                    case 4:
+                        _a.sent();
+                        _a.label = 5;
+                    case 5: return [2 /*return*/, newGroup];
+                }
+            });
+        });
+    };
+    nAryTree.prototype.addConnector = function (groupId, connectorId, type) {
+        return __awaiter(this, void 0, void 0, function () {
+            var newConnector;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        newConnector = { type: type, parentId: groupId, childId: connectorId };
+                        return [4 /*yield*/, groupsToUsersDB.addData(newConnector)];
+                    case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
@@ -154,7 +183,7 @@ var nAryTree = /** @class */ (function () {
             var deletedGroup;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, groupsDB.deleteData(groupId, "id")];
+                    case 0: return [4 /*yield*/, groupsDB.deleteData([{ "field": "id", "value": groupId }])];
                     case 1:
                         deletedGroup = _a.sent();
                         return [4 /*yield*/, this.deleteConnectors(groupId)];
@@ -195,13 +224,13 @@ var nAryTree = /** @class */ (function () {
                         if (!(_i < connectors_1.length)) return [3 /*break*/, 8];
                         connector = connectors_1[_i];
                         if (!(connector.childId === groupId)) return [3 /*break*/, 4];
-                        return [4 /*yield*/, groupsToUsersDB.deleteData(connector.childId, "childId")];
+                        return [4 /*yield*/, groupsToUsersDB.deleteData([{ "field": "childId", "value": connector.childId }])];
                     case 3:
                         _a.sent();
                         _a.label = 4;
                     case 4:
                         if (!(connector.parentId === groupId)) return [3 /*break*/, 7];
-                        return [4 /*yield*/, groupsToUsersDB.deleteData(connector.parentId, "parentId")];
+                        return [4 /*yield*/, groupsToUsersDB.deleteData([{ "field": "parentId", "value": connector.parentId }])];
                     case 5:
                         _a.sent();
                         return [4 /*yield*/, this.deleteGroup(connector.childId)];
@@ -221,7 +250,7 @@ var nAryTree = /** @class */ (function () {
             var deletedConnector;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, groupsToUsersDB.deleteData(childId, "childId", groupId)];
+                    case 0: return [4 /*yield*/, groupsToUsersDB.deleteData([{ "field": "childId", "value": childId }, { "field": "parentId", "value": groupId }])];
                     case 1:
                         deletedConnector = _a.sent();
                         if (!(type === "group")) return [3 /*break*/, 3];

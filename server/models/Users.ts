@@ -1,7 +1,7 @@
 import {DB} from '../lib/db';
+import * as uniqid from 'uniqid';
 
 const usersDB = new DB("users");
-
 
 export {};
 
@@ -10,7 +10,7 @@ import {User} from './User';
 
 interface IUsers{
     addUser(userName:string, age:number, password:string):void,
-    removeUser(userId:number):void,
+    removeUser(userId:string):void,
     setUserAge(userName:string, newAge:number):boolean,
     setUserPassword(userName:string, newPassword:string):boolean,
     returnUserByName(userName:string):User|null,
@@ -34,7 +34,7 @@ export class Users implements IUsers{
             await usersDB.initiate();
         }
         // let newId = data.length;
-        body.id= new Date().getUTCMilliseconds();
+        body.id= uniqid();
         let user = await usersDB.addData(body);
         return user;
         // this.users.push(new User(userName, age, password,profileImg));
@@ -45,17 +45,12 @@ export class Users implements IUsers{
         // return status;
     }
 
-    public editUser(userId:number,body:any){
-        return usersDB.editData(userId,body);
-        // usersDB.getData().then((users)=>{
-        //     for(let user of users){
-        //
-        //     }
-        // });
+    public editUser(userId:string,updates:{field:string,value:any}[]){
+        return usersDB.editData([{"field":"id","value":userId}],updates);
     }
 
-    public removeUser(userId:number){
-        return usersDB.deleteData(userId,"id");
+    public removeUser(userId:string){
+        return usersDB.deleteData([{"field":"id","value":userId}]);
 
         // var user = this.returnUserByName(userName)
         // if(user!==null){

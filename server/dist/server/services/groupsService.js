@@ -111,6 +111,17 @@ var GroupsService = /** @class */ (function () {
                 }
             });
         }); };
+        this.addConnector = function (groupId, connectorId, type) { return __awaiter(_this, void 0, void 0, function () {
+            var myConnector;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.chat[0].getGroups().addConnector(groupId, connectorId, type)];
+                    case 1:
+                        myConnector = _a.sent();
+                        return [2 /*return*/, myConnector];
+                }
+            });
+        }); };
         this.chat = [];
         this.chat.push(new Chat_1.Chat());
     }

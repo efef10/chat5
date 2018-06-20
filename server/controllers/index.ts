@@ -11,6 +11,7 @@ import {addGroup} from './groupsController'
 
 import {getConnectors} from './groupsController'
 import {deleteConnector} from './groupsController'
+import {addConnector} from './groupsController'
 
 export {getUsers,
         editGroup,
@@ -19,6 +20,7 @@ export {getUsers,
         getGroups,
         getConnectors,
         deleteConnector,
+        addConnector,
         addUser,
         editUser,
         deleteUser}

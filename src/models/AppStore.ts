@@ -56,8 +56,8 @@ export class AppService {
 
     }
 
-    editUser(user:any){
-        return Api.editUser(user)
+    editUser(userId:string,updates:{field:string,value:any}[]){
+        return Api.editUser(userId,updates)
             .then((user)=>{
                 Api.getUsers()
                     .then((users)=>{
@@ -68,7 +68,7 @@ export class AppService {
             })
     }
 
-    deleteUser(userId:number){
+    deleteUser(userId:string){
         return Api.deleteUser(userId)
             .then((user)=>{
                 Api.getUsers()
@@ -80,7 +80,7 @@ export class AppService {
             })
     }
 
-    deleteGroup(groupId:number){
+    deleteGroup(groupId:string){
         return Api.deleteGroup(groupId)
             .then((group)=>{
                 Api.getGroups()
@@ -104,7 +104,7 @@ export class AppService {
             })
     }
 
-    addGroup(groupName:string,toGroupID:number){
+    addGroup(groupName:string,toGroupID:string){
         return Api.addGroup(groupName,toGroupID)
             .then((group)=>{
                 Api.getGroups()
@@ -116,7 +116,11 @@ export class AppService {
             })
     }
 
-    async allUsersOfGroup(groupId:number){
+    addUserToGroup(userId:string,toGroupID:string){
+        return Api.addConnector(userId,toGroupID,"user");
+    }
+
+    async allUsersOfGroup(groupId:string){
         let connectors = await Api.getConnectors(groupId);
         if(!connectors || !connectors[0]){
             return [];
@@ -133,7 +137,7 @@ export class AppService {
         return children;
     }
 
-    deleteConnector(groupId:number, childToDelete:{childId:number,type:string}){
+    deleteConnector(groupId:string, childToDelete:{childId:string,type:string}){
         return Api.deleteConnector(groupId,childToDelete)
             .then((deletedChild)=>{
                 Api.getGroups()

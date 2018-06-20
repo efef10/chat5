@@ -84,12 +84,12 @@ export class AppService {
 
     }
 
-    editUser(user:any){
-        return Api.editUser(user)
-            .then((user)=>{
-                return user;
-            })
-    }
+    // editUser(user:any){
+    //     return Api.editUser(user)
+    //         .then((user)=>{
+    //             return user;
+    //         })
+    // }
 
     addUser(username:string,password:string,age:number,imageUrl?:string){
         return Api.addUser({name:username,password:password,age:age,imageUrl:imageUrl || ""})

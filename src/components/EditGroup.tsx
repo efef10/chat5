@@ -13,7 +13,7 @@ interface IEditProps{
 
 interface IEditState{
     groupName:string,
-    groupId:number,
+    groupId:string,
     list:any[],
 
 }
@@ -36,7 +36,7 @@ class EditGroup extends React.Component<IEditProps,IEditState>{
     }
 
 
-    deleteData=(childId:number,childType:string)=>{
+    deleteData=(childId:string,childType:string)=>{
         appService.deleteConnector(this.state.groupId,{childId:childId,type:childType});
         let tmpList = [...this.state.list];
         let newList = tmpList.filter((item)=>{
@@ -46,6 +46,7 @@ class EditGroup extends React.Component<IEditProps,IEditState>{
     }
 
     addGroup=(groupName:string)=>{
+        debugger
         appService.addGroup(groupName,this.state.groupId);
     }
 
@@ -53,6 +54,10 @@ class EditGroup extends React.Component<IEditProps,IEditState>{
         // const username = this.props.location.state.object.name;
         // const id = this.props.location.state.object.id;
         // appService.editUser({type:"user",id:id,name:username, age:this.state.age,password:this.state.password})
+    }
+
+    addUserToGroup=(userId:string)=>{
+        appService.addUserToGroup(userId,this.state.groupId);
     }
 
     render(){
@@ -65,7 +70,7 @@ class EditGroup extends React.Component<IEditProps,IEditState>{
                     <input type="text" value={this.state.groupName} onChange={this.groupNameChanged} placeholder="Group Name"/>
                 </div>
                 <input type="submit" onClick={this.submit} value="save"/>
-                <DisplayChildren addGroup={this.addGroup} users={this.props.users} type="children" list={this.state.list} deleteData={this.deleteData} groupId={this.state.groupId}/>
+                <DisplayChildren addUserToGroup={this.addUserToGroup} addGroup={this.addGroup} users={this.props.users} type="children" list={this.state.list} deleteData={this.deleteData} groupId={this.state.groupId}/>
 
 
             </>

@@ -57,7 +57,7 @@ function addGroup(req, res) {
         var group;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, groupsService.addGroup(Number(req.params.groupId), req.body)];
+                case 0: return [4 /*yield*/, groupsService.addGroup(req.params.groupId, req.body)];
                 case 1:
                     group = _a.sent();
                     res.json(group);
@@ -72,7 +72,7 @@ function editGroup(req, res) {
         var group;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, groupsService.editGroup(Number(req.params.groupId), req.body)];
+                case 0: return [4 /*yield*/, groupsService.editGroup(req.params.groupId, req.body)];
                 case 1:
                     group = _a.sent();
                     res.json(group);
@@ -87,7 +87,7 @@ function deleteGroup(req, res) {
         var group;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, groupsService.deleteGroup(Number(req.params.groupId))];
+                case 0: return [4 /*yield*/, groupsService.deleteGroup(req.params.groupId)];
                 case 1:
                     group = _a.sent();
                     res.json(group);
@@ -102,7 +102,7 @@ function getConnectors(req, res) {
         var connectors;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, groupsService.getConnectors(Number(req.params.groupId))];
+                case 0: return [4 /*yield*/, groupsService.getConnectors(req.params.groupId)];
                 case 1:
                     connectors = _a.sent();
                     res.json(connectors);
@@ -117,7 +117,7 @@ function deleteConnector(req, res) {
         var connector;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, groupsService.deleteConnector(Number(req.params.groupId), Number(req.params.childId), req.body.type)];
+                case 0: return [4 /*yield*/, groupsService.deleteConnector(req.params.groupId, req.params.childId, req.body.type)];
                 case 1:
                     connector = _a.sent();
                     res.json(connector);
@@ -127,4 +127,19 @@ function deleteConnector(req, res) {
     });
 }
 exports.deleteConnector = deleteConnector;
+function addConnector(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var group;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, groupsService.addConnector(req.params.groupId, req.body.connectorId, req.body.type)];
+                case 1:
+                    group = _a.sent();
+                    res.json(group);
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.addConnector = addConnector;
 //# sourceMappingURL=groupsController.js.map

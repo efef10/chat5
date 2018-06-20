@@ -64,56 +64,87 @@ export class DB{
 
     }
 
-    editData(objID:number, data:any){
+    // editData(objID:string, data:any){
+    //     this.readFromJson();
+    //     return new Promise((resolve,reject)=>{
+    //         let myObject;
+    //         for(let obj of this.myData[this.fileName]){
+    //             if(obj.id === objID){
+    //                 myObject=obj;
+    //             }
+    //         }
+    //
+    //         let index = this.myData[this.fileName].indexOf(myObject);
+    //         if(myObject.type === "user"){
+    //             this.myData[this.fileName][index].password = data.password;
+    //             this.myData[this.fileName][index].age = data.age;
+    //         }
+    //         else{
+    //             this.myData[this.fileName][index].children = data.children;
+    //             //fixme
+    //         }
+    //         this.writeToJson();
+    //         resolve(myObject);
+    //     })
+    // }
+
+    editData(conditions:{field:string,value:any}[],updates:{field:string,value:any}[]){
         this.readFromJson();
         return new Promise((resolve,reject)=>{
-            let myObject;
-            for(let obj of this.myData[this.fileName]){
-                if(obj.id === objID){
-                    myObject=obj;
+            let myObjects=[];
+            for(let obj of this.myData[this.fileName]) {
+                let objInConditions = true;
+                for (let condition of conditions) {
+                    if(obj[condition["field"]]!==condition["value"]){
+                        objInConditions=false;
+                        break;
+                    }
+                }
+                if(objInConditions){
+                    myObjects.push(obj);
                 }
             }
 
-            let index = this.myData[this.fileName].indexOf(myObject);
-            if(myObject.type === "user"){
-                this.myData[this.fileName][index].password = data.password;
-                this.myData[this.fileName][index].age = data.age;
+            for(let obj of myObjects){
+                let index = this.myData[this.fileName].indexOf(obj);
+                for(let update in updates){
+                    this.myData[this.fileName][index][update["field"]] = update["value"];
+                    this.writeToJson();
+                    this.readFromJson();
+                }
             }
-            else{
-                this.myData[this.fileName][index].children = data.children;
-                //fixme
-            }
-            this.writeToJson();
-            resolve(myObject);
+
+
+            resolve(myObjects);
         })
     }
 
-    deleteData(objId:number,keyField:string,anotherField?:number){
-        return new Promise((resolve,reject)=>{
-            this.readFromJson().then(()=>{
-                let myObject;
-                // for(let obj of this.myData[this.fileName]){
-                //     if(obj[keyField] === objId){
-                //         myObject=obj;
-                //     }
-                // }
-                for(let obj of this.myData[this.fileName]){
-                    if(obj[keyField] === objId){
-                        if(!anotherField || obj["parentId"] === anotherField){
-                            myObject=obj;
+    deleteData(conditions:{field:string,value:any}[]){
+        this.readFromJson();
+            return new Promise((resolve,reject)=>{
+                let myObjects=[];
+                for(let obj of this.myData[this.fileName]) {
+                    let objInConditions = true;
+                    for (let condition of conditions) {
+                        if(obj[condition["field"]]!==condition["value"]){
+                            objInConditions=false;
+                            break;
                         }
+                    }
+                    if(objInConditions){
+                        myObjects.push(obj);
                     }
                 }
 
-                let index = this.myData[this.fileName].indexOf(myObject);
-                this.myData[this.fileName].splice(index,1);
-
-                this.writeToJson();
-                if(!myObject){
-                    resolve({});
+                for(let obj of myObjects){
+                    let index = this.myData[this.fileName].indexOf(obj);
+                    this.myData[this.fileName].splice(index,1);
+                    this.writeToJson();
+                    this.readFromJson();
                 }
-                resolve(myObject);
+                this.writeToJson();
+                resolve(myObjects);
             });
-        })
+        }
     }
-}
+

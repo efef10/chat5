@@ -20,4 +20,6 @@ var groupsController_5 = require("./groupsController");
 exports.getConnectors = groupsController_5.getConnectors;
 var groupsController_6 = require("./groupsController");
 exports.deleteConnector = groupsController_6.deleteConnector;
+var groupsController_7 = require("./groupsController");
+exports.addConnector = groupsController_7.addConnector;
 //# sourceMappingURL=index.js.map

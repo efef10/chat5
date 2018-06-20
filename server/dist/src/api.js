@@ -31,6 +31,9 @@ var Api = /** @class */ (function () {
     Api.deleteConnector = function (groupId, childToDelete) {
         return this.delete("/groups/" + groupId + "/connectors/" + childToDelete.childId, { type: childToDelete.type });
     };
+    Api.addConnector = function (connectorId, toGroupID, type) {
+        return this.post("/groups/" + toGroupID + "/connectors", { connectorId: connectorId, type: type });
+    };
     Api.get = function (url) {
         return fetch(Api.baseURL + url, {
             method: "GET"

@@ -17,12 +17,12 @@ class UsersService{
         return user;
     }
 
-    editUser = async(userId:number,body:any)=>{
-        const user = await users.editUser(userId,body);
+    editUser = async(userId:string,updates:{field:string,value:any}[])=>{
+        const user = await users.editUser(userId,updates);
         return user;
     }
 
-    deleteUser = async(userId:number)=>{
+    deleteUser = async(userId:string)=>{
         const user = await users.removeUser(userId);
         return user;
     }

@@ -20,13 +20,13 @@ export async function addUser (req:Request,res:Response) {
 }
 
 export async function editUser (req:Request,res:Response) {
-    const user = await usersService.editUser(Number(req.params.userId),req.body);
+    const user = await usersService.editUser(req.params.userId,req.body.updates);
     res.json(user);
     // return users;
 }
 
 export async function deleteUser (req:Request,res:Response) {
-    const user = await usersService.deleteUser(Number(req.params.userId));
+    const user = await usersService.deleteUser(req.params.userId);
     res.json(user);
     // return users;
 }

@@ -36,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var db_1 = require("../lib/db");
+var uniqid = require("uniqid");
 var usersDB = new db_1.DB("users");
 var Users = /** @class */ (function () {
     function Users(users) {
@@ -59,7 +60,7 @@ var Users = /** @class */ (function () {
                         _a.label = 3;
                     case 3:
                         // let newId = data.length;
-                        body.id = new Date().getUTCMilliseconds();
+                        body.id = uniqid();
                         return [4 /*yield*/, usersDB.addData(body)];
                     case 4:
                         user = _a.sent();
@@ -74,14 +75,9 @@ var Users = /** @class */ (function () {
     };
     Users.prototype.editUser = function (userId, body) {
         return usersDB.editData(userId, body);
-        // usersDB.getData().then((users)=>{
-        //     for(let user of users){
-        //
-        //     }
-        // });
     };
     Users.prototype.removeUser = function (userId) {
-        return usersDB.deleteData(userId, "id");
+        return usersDB.deleteData([{ "field": "id", "value": userId }]);
         // var user = this.returnUserByName(userName)
         // if(user!==null){
         //     var index = this.users.indexOf(user);

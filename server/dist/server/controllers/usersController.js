@@ -74,7 +74,7 @@ function editUser(req, res) {
         var user;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, usersService.editUser(Number(req.params.userId), req.body)];
+                case 0: return [4 /*yield*/, usersService.editUser(req.params.userId, req.body)];
                 case 1:
                     user = _a.sent();
                     res.json(user);
@@ -89,7 +89,7 @@ function deleteUser(req, res) {
         var user;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, usersService.deleteUser(Number(req.params.userId))];
+                case 0: return [4 /*yield*/, usersService.deleteUser(req.params.userId)];
                 case 1:
                     user = _a.sent();
                     res.json(user);

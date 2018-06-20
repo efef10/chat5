@@ -1,6 +1,7 @@
 import {Group} from './Group';
 import {User} from './User';
 import {DB} from '../lib/db';
+import * as uniqid from 'uniqid';
 
 const groupsDB = new DB("groups");
 const groupsToUsersDB = new DB("userToGroups");
@@ -45,35 +46,15 @@ export class nAryTree implements INAryTree{
         // return this.root === null;
     }
 
-    public async allGroups(arr?:Group[], currentGroup?:Group|null){
+    public async allGroups(){
         let groups = await groupsDB.getData()
         return groups;
-        // let foundGroups = arr || [];
-        // let group = currentGroup;
-        // if(group === undefined){
-        //     group = (await this.getRoot() as Group);
-        // }
-        //
-        // if (!!group){
-        //     foundGroups.push(group);
-        // }
-        //
-        // if (group === null || !Group.hasChildren(group)){
-        //     return foundGroups;
-        // }
-        // var children = Group.getChildren(group);
-        // if((children[0] as any).type === "group"){
-        //     for (var i=0 ; i<children.length; i++){
-        //         this.allGroups(foundGroups, children[i] as Group);
-        //     }
-        // }
-        // return foundGroups;
     }
 
     public async addInitialGroup(groupName:string){
         if(this._rootIsNull()){
             await groupsDB.initiate();
-            await groupsDB.addData({id:new Date().getUTCMilliseconds(),type:"group",name:groupName, messages:[],parent:null,children:[]})
+            await groupsDB.addData({id:uniqid(),type:"group",name:groupName, messages:[],parent:null,children:[]})
             await groupsDB.getData().then((data)=>{
                 this.root = data[0];
             });
@@ -82,20 +63,38 @@ export class nAryTree implements INAryTree{
         return false;
     }
 
-    public async addGroup(newGroupName:string,toGroupID:number){
+    public async addGroup(newGroupName:string,toGroupID:string){
         if(this._rootIsNull()){
             await groupsDB.initiate()
         }
 
-        let newGroup = {type:"group",name:newGroupName,id:new Date().getUTCMilliseconds()}
+        let newGroup = {type:"group",name:newGroupName,id:uniqid()}
+        let connectors = await groupsToUsersDB.getData();
+        let myConnectors = connectors.filter((connector)=>{
+            return connector.parentId === toGroupID;
+        })
+
         groupsDB.addData(newGroup);
         let connector = {type:"group",parentId:toGroupID,childId:newGroup.id};
         groupsToUsersDB.addData(connector);
-        // let myGroup = this.getGroupById(toGroupID);
-        // if(!!myGroup){
-        //     Group.addNewGroup(myGroup,newGroupName);
-        //     await groupsDB.setMyData([this.root]);
-        // }
+
+        if(myConnectors.length>0 && myConnectors[0].type ==="user"){
+
+            //=== update the new parent of the users:  ===
+            await groupsToUsersDB.editData([{"field":"parentId","value":toGroupID}],[{"field":"parentId","value":newGroup.id}])
+            //============================================
+
+            let newGroupOthers = {type:"group",name:"others",id:uniqid()}
+            await groupsDB.addData(newGroupOthers);
+            await groupsToUsersDB.addData({type:"group",parentId:toGroupID,childId:newGroupOthers.id});
+
+        }
+        return newGroup;
+    }
+
+    public async addConnector(groupId:string,connectorId:string,type:string){
+        let newConnector = {type:type,parentId:groupId,childId:connectorId}
+        return await groupsToUsersDB.addData(newConnector);
     }
 
     public getGroupById(groupId:number,currentGroup?:Group):Group|null{
@@ -123,38 +122,13 @@ export class nAryTree implements INAryTree{
         return null;
     }
 
-    public async deleteGroup(groupId:number){
-        let deletedGroup = await groupsDB.deleteData(groupId,"id");
+    public async deleteGroup(groupId:string){
+        let deletedGroup = await groupsDB.deleteData([{"field":"id","value":groupId}]);
         await this.deleteConnectors(groupId);
         return deletedGroup;
-        // let connectors = await groupsToUsersDB.getData();
-        // for(let connector of connectors){
-        //     if(connector.childId === groupId){
-        //         groupsToUsersDB.deleteData(connector.childId,"childId");
-        //     }
-        //     if(connector.parentId === groupId){
-        //         groupsToUsersDB.deleteData(connector.childId,"parentId");
-        //     }
-        // }
-
-        // let group = this.getGroupById(groupId);
-        // let parentId;
-        // if(!!group){
-        //     parentId = Group.getParent(group);
-        //     if(!!parentId){
-        //         let parent = this.getGroupById(parentId);
-        //         if(!!parent){
-        //             let children = Group.getChildren(parent);
-        //             let index = children.indexOf(group);
-        //             Group.removeGroup(parent,index);
-        //             await groupsDB.setMyData([this.root]);
-        //         }
-        //
-        //     }
-        // }
     }
 
-    public async getConnectors(groupId:number){
+    public async getConnectors(groupId:string){
         let connectors = await groupsToUsersDB.getData()
         let mapped =  connectors.filter((connector)=>{
             return connector.parentId === groupId;
@@ -162,21 +136,22 @@ export class nAryTree implements INAryTree{
         return mapped;
     }
 
-    public async deleteConnectors(groupId:number){
+    public async deleteConnectors(groupId:string){
         let connectors = await groupsToUsersDB.getData();
         for(let connector of connectors){
             if(connector.childId === groupId){
-                await groupsToUsersDB.deleteData(connector.childId,"childId");
+                await groupsToUsersDB.deleteData([{"field":"childId","value":connector.childId}]);
             }
+
             if(connector.parentId === groupId){
-                await groupsToUsersDB.deleteData(connector.parentId,"parentId");
+                await groupsToUsersDB.deleteData([{"field":"parentId","value":connector.parentId}]);
                 await this.deleteGroup(connector.childId)
             }
         }
     }
 
-    public async deleteConnector(groupId:number,childId:number,type:string){
-        let deletedConnector = await groupsToUsersDB.deleteData(childId,"childId",groupId);
+    public async deleteConnector(groupId:string,childId:string,type:string){
+        let deletedConnector = await groupsToUsersDB.deleteData([{"field":"childId","value":childId},{"field":"parentId","value":groupId}]);
         if(type==="group"){
             await this.deleteGroup(childId)
         }

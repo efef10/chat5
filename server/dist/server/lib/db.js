@@ -123,32 +123,92 @@ var DB = /** @class */ (function () {
             resolve(myObject);
         });
     };
-    DB.prototype.deleteData = function (objId, keyField, anotherField) {
+    // editData(conditions:{field:string,value:any}[],   objID:string, data:any){
+    //     [{"id":"123",length:5}]
+    //
+    //     this.readFromJson();
+    //     return new Promise((resolve,reject)=>{
+    //         let myObjects=[];
+    //         for(let obj of this.myData[this.fileName]) {
+    //             for (let field in conditions) {
+    //                 if(obj[field]!==conditions[field]){
+    //                     break;
+    //                 }
+    //             }
+    //             myObjects.push(obj);
+    //         }
+    //
+    //         for(let obj of this.myData[this.fileName]){
+    //
+    //             if(obj.id === objID){
+    //                 myObjects.push(obj);
+    //             }
+    //         }
+    //
+    //         let index = this.myData[this.fileName].indexOf(myObject);
+    //         if(myObject.type === "user"){
+    //             this.myData[this.fileName][index].password = data.password;
+    //             this.myData[this.fileName][index].age = data.age;
+    //         }
+    //         else{
+    //             this.myData[this.fileName][index].children = data.children;
+    //             //fixme
+    //         }
+    //         this.writeToJson();
+    //         resolve(myObject);
+    //     })
+    // }
+    // deleteData(objId:string,keyField:string,anotherField?:string){
+    //     return new Promise((resolve,reject)=>{
+    //         this.readFromJson().then(()=>{
+    //             let myObject;
+    //             for(let obj of this.myData[this.fileName]){
+    //                 if(obj[keyField] === objId){
+    //                     if(!anotherField || obj["parentId"] === anotherField){
+    //                         myObject=obj;
+    //                     }
+    //                 }
+    //             }
+    //
+    //             let index = this.myData[this.fileName].indexOf(myObject);
+    //             this.myData[this.fileName].splice(index,1);
+    //
+    //             this.writeToJson();
+    //             if(!myObject){
+    //                 resolve({});
+    //             }
+    //             resolve(myObject);
+    //         });
+    //     })
+    // }
+    DB.prototype.deleteData = function (conditions) {
         var _this = this;
+        this.readFromJson();
         return new Promise(function (resolve, reject) {
-            _this.readFromJson().then(function () {
-                var myObject;
-                // for(let obj of this.myData[this.fileName]){
-                //     if(obj[keyField] === objId){
-                //         myObject=obj;
-                //     }
-                // }
-                for (var _i = 0, _a = _this.myData[_this.fileName]; _i < _a.length; _i++) {
-                    var obj = _a[_i];
-                    if (obj[keyField] === objId) {
-                        if (!anotherField || obj["parentId"] === anotherField) {
-                            myObject = obj;
-                        }
+            var myObjects = [];
+            for (var _i = 0, _a = _this.myData[_this.fileName]; _i < _a.length; _i++) {
+                var obj = _a[_i];
+                var objInConditions = true;
+                for (var _b = 0, conditions_1 = conditions; _b < conditions_1.length; _b++) {
+                    var condition = conditions_1[_b];
+                    if (obj[condition["field"]] !== condition["value"]) {
+                        objInConditions = false;
+                        break;
                     }
                 }
-                var index = _this.myData[_this.fileName].indexOf(myObject);
+                if (objInConditions) {
+                    myObjects.push(obj);
+                }
+            }
+            for (var _c = 0, myObjects_1 = myObjects; _c < myObjects_1.length; _c++) {
+                var obj = myObjects_1[_c];
+                var index = _this.myData[_this.fileName].indexOf(obj);
                 _this.myData[_this.fileName].splice(index, 1);
                 _this.writeToJson();
-                if (!myObject) {
-                    resolve({});
-                }
-                resolve(myObject);
-            });
+                _this.readFromJson();
+            }
+            _this.writeToJson();
+            resolve(myObjects);
         });
     };
     return DB;

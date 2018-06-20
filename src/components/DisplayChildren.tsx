@@ -10,11 +10,12 @@ import {appService} from "../models/AppStore";
 
 interface IDisplayChildrenProps{
     list:any;
-    deleteData(objId:number,item?:string):void
+    deleteData(objId:string,item?:string):void
     type:string
     users:any[]
     addGroup(groupName:string):void
-    groupId?:number
+    groupId?:string
+    addUserToGroup(userId:string):void
 }
 
 interface IDisplayChildrenState{
@@ -23,7 +24,8 @@ interface IDisplayChildrenState{
 }
 
 class DisplayChildren extends React.Component<IDisplayChildrenProps,IDisplayChildrenState>{
-    private groupName:any
+    private groupName:any;
+    private selectUser:any;
 
     constructor(props:any){
         super(props);
@@ -32,9 +34,9 @@ class DisplayChildren extends React.Component<IDisplayChildrenProps,IDisplayChil
     }
 
 
-    // componentWillReceiveProps(props:IDisplayChildrenProps){
-    //     this.setState({list:[...props.list]})
-    // }
+    componentWillReceiveProps(props:IDisplayChildrenProps){
+        this.setState({list:[...props.list]})
+    }
 
     deleteData=(e:any, item:any)=>{
         let children = this.state.list.filter((child)=>{
@@ -46,18 +48,20 @@ class DisplayChildren extends React.Component<IDisplayChildrenProps,IDisplayChil
     }
 
     calcChildren=(e:any,item:any)=>{
-        appService.allUsersOfGroup(Number(item.id)).then((children)=>{
+        appService.allUsersOfGroup(item.id).then((children)=>{
             this.setState({currentChildren:children});
         })
     }
 
     submit = ()=>{
-        // const groupName = e.target.elements.groupName.value;
-        this.props.addGroup(this.groupName);
+        this.props.addGroup(this.groupName.value);
+        this.groupName.value="";
+    }
+
+    addUser = ()=>{
         // const selectWrapper = e.target.elements.selectedGroup;
-        // const selected = selectWrapper.options[selectWrapper.selectedIndex];
-        // // console.log(selected.value);
-        // appService.addGroup(groupName,Number(selected.value));
+        const selected = this.selectUser.options[this.selectUser.selectedIndex];
+        this.props.addUserToGroup(selected.value);
     }
 
     render(){
@@ -87,8 +91,8 @@ class DisplayChildren extends React.Component<IDisplayChildrenProps,IDisplayChil
         return (
             <div className="displayChildren">
                 <>
-                    <button>add user to this group</button>
-                    <select name="selectedGroup" id="selectedGroup">
+                    <button onClick={this.addUser}>add user to this group</button>
+                    <select name="selectUser" id="selectedGroup" ref={elem=>this.selectUser = elem}>
                         {options}
                     </select>
                     <button onClick={this.submit}>add group to this group</button>

@@ -27,7 +27,7 @@ var Chat = /** @class */ (function () {
         // this.addUserToGroup("efrat","jsbootcamp3");
         // this.addUserToGroup("eli","jsbootcamp3");
         // this.addUserToGroup("bambi","jsbootcamp3");
-        this.groups.addGroup("efffff", -1);
+        this.groups.addGroup("efffff", "");
         // this.addGroup("react",-1);
         // this.addUserToGroup("efrat","jsbootcamp3>react");
         // // this.addUserToGroup("eli","jsbootcamp3>react");

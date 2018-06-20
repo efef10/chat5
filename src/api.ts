@@ -15,7 +15,6 @@ export class Api{
     }
 
     static editUser(user:any){
-        debugger
         return this.put('/users/'+user.id,user);
     }
 

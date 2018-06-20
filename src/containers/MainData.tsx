@@ -16,7 +16,6 @@ class MainData extends React.Component<IMainDataProps,{}>{
     }
 
     // public renderLogIn=(props:any)=>
-    // {debugger;
     // return appService.getLoggedUser()===""?<Popup {...props} />:<Redirect to={{pathname:"/"}}/>}
 
     public render(){

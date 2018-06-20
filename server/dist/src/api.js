@@ -13,7 +13,6 @@ var Api = /** @class */ (function () {
         return this.delete("/users/" + userId, { type: "user" });
     };
     Api.editUser = function (user) {
-        debugger;
         return this.put('/users/' + user.id, user);
     };
     /////////////////////////////////////////////

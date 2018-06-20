@@ -147,7 +147,6 @@ var AppService = /** @class */ (function () {
         this.listeners.push(listener);
     };
     AppService.prototype.onStoreChanged = function () {
-        debugger;
         for (var _i = 0, _a = this.listeners; _i < _a.length; _i++) {
             var listener = _a[_i];
             listener({

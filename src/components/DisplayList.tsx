@@ -27,14 +27,6 @@ class DisplayList extends React.Component<IDisplayListProps,IDisplayListState>{
                     list:this.props.list}
     }
 
-    // componentDidMount() {
-    //     if (!!this.props.groupId) {
-    //     appService.allUsersOfGroup(this.props.groupId).then((children) => {
-    //         this.setState({currentChildren: children});
-    //         // this.children = children;
-    //     })
-    // }
-    // }
 
     componentWillReceiveProps(props:IDisplayListProps){
         this.setState({list:[...props.list]})
@@ -44,7 +36,6 @@ class DisplayList extends React.Component<IDisplayListProps,IDisplayListState>{
         let children = this.state.list.filter((child)=>{
             child.id!==item.id;
         })
-        debugger;
         this.setState({list:children})
         this.props.deleteData(item.id,item.type)
     }
@@ -56,7 +47,6 @@ class DisplayList extends React.Component<IDisplayListProps,IDisplayListState>{
     }
 
     render(){
-        debugger
         const list = this.state.list.map((item:any,idx:any)=>{
             return (
                 <li key={idx}>
@@ -77,16 +67,11 @@ class DisplayList extends React.Component<IDisplayListProps,IDisplayListState>{
         })
         return (
             <div className="displayList">
-                {(this.props.type === "users" || this.props.type === "groups")?
-                    (<Link to={`${this.props.type}/new`}>
+                <Link to={`${this.props.type}/new`}>
                         <button>create new {this.props.type === "users" ? "user" : "group"}</button>
-                    </Link>):
-                    (<>
-                        <button>add user to this group</button>
-                        <button>add group to this group</button>
-                        <input type="text" placeholder="New Group Name"/>
-                     </>)
-                }
+                    </Link>
+
+
                 <ul>{list}</ul>
             </div>
         )

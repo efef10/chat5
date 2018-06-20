@@ -282,7 +282,6 @@ export class AppService {
     }
 
     private onStoreChanged(){
-        debugger
         for(const listener of this.listeners){
             listener({
                 users: this.users,

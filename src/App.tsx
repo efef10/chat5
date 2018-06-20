@@ -51,7 +51,6 @@ class App extends React.Component<{},IAppState> {
                     groups: data.groups
                 });
             }
-            debugger
         })
     }
 
@@ -139,11 +138,9 @@ class App extends React.Component<{},IAppState> {
     public editGroup = (props:any)=>{
         // this.setState({children:props.location.state.children});
         // return <EditGroup {...props} list={this.state.children}/>
-        debugger
-
-        let list = props.location.state.children
-
-        return <EditGroup {...props} list={list}/>
+        return (props.location.state?
+                 <EditGroup {...props} list={props.location.state.children} users={this.state.users}/>:
+                 <div/>)
     }
 
 

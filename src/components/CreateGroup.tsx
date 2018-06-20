@@ -13,7 +13,6 @@ class CreateGroup extends React.Component<ICreateGroupProps,{}>{
     }
 
     onSubmit(e:any){
-        debugger
         const groupName = e.target.elements.groupName.value;
         const selectWrapper = e.target.elements.selectedGroup;
         const selected = selectWrapper.options[selectWrapper.selectedIndex];

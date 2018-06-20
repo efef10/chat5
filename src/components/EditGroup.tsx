@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {appService} from "../models/AppStore";
-import DisplayList from "./DisplayList";
+// import DisplayList from "./DisplayList";
+import DisplayChildren from "./DisplayChildren";
 
 interface IEditProps{
     match:any,
@@ -29,10 +30,10 @@ class EditGroup extends React.Component<IEditProps,IEditState>{
         this.setState({groupName:e.target.value});
     }
 
-componentWillReceiveProps(){
-        this.forceUpdate();
-}
 
+    componentWillReceiveProps(props:IEditProps){
+        this.setState({list:[...props.list]});
+    }
 
 
     deleteData=(childId:number,childType:string)=>{
@@ -42,6 +43,10 @@ componentWillReceiveProps(){
             item.id !== childId
         })
         this.setState({list:newList});
+    }
+
+    addGroup=(groupName:string)=>{
+        appService.addGroup(groupName,this.state.groupId);
     }
 
     submit=()=>{
@@ -60,7 +65,7 @@ componentWillReceiveProps(){
                     <input type="text" value={this.state.groupName} onChange={this.groupNameChanged} placeholder="Group Name"/>
                 </div>
                 <input type="submit" onClick={this.submit} value="save"/>
-                <DisplayList type="children" list={this.state.list} deleteData={this.deleteData} groupId={this.state.groupId}/>
+                <DisplayChildren addGroup={this.addGroup} users={this.props.users} type="children" list={this.state.list} deleteData={this.deleteData} groupId={this.state.groupId}/>
 
 
             </>

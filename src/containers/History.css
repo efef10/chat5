@@ -1,0 +1,91 @@
+/*History css*/
+pre{
+    font-family:Arial;
+    width:100%;
+    box-sizing: border-box;
+    word-wrap: break-word;
+    white-space: pre-wrap;       /* Since CSS 2.1 */
+    /*white-space: -pre-wrap;      !* Opera 4-6 *!*/
+    white-space: -o-pre-wrap;    /* Opera 7 */
+
+}
+
+.history{
+    flex: 1;
+    overflow:auto;
+    /*overflow-y:hidden;*/
+}
+
+.dataFlow {
+    height:100%;
+    display:flex;
+    flex-direction: column;
+}
+
+.histMessage{
+    background-color: white;
+    float:right;
+    padding:5px;
+    /*margin-bottom: 20px;*/
+    border-radius: 7px;
+    /*word-wrap: break-word;*/
+    word-break: break-word;
+    max-width: 60%;
+    /*overflow:auto;*/
+}
+.histMessage span{
+    margin-bottom:5px;
+    /*opacity: 1;*/
+    /*transition: opacity 2s;*/
+}
+.messages{
+    /*display:flex;*/
+    /*flex-direction: column;*/
+    padding:10px;
+    width:100%;
+    box-sizing: border-box;
+}
+.message{
+    margin-bottom:20px;
+    word-wrap: break-word;
+    /*display:inline-block;*/
+
+}
+
+.time{
+    color:grey;
+    font-size: 10px;
+}
+
+.otherMessage{
+    background-color: white;
+}
+.myMessage{
+    float:left;
+    background-color: #dcf8c6;
+}
+/*.myMessage::before{*/
+    /*content:"eee";*/
+/*}*/
+.messageOwner{
+    font-size:10px;
+    color:blueviolet;
+}
+#historyHeader{
+    background-color : #25d366;
+    /*display:inline-block;*/
+    width:40%;
+    margin:5px auto;
+    text-align: center;
+    border-radius: 10px;
+    padding:2px 0;
+    font-size:20px;
+    font-family: "Arial Rounded MT Bold";
+    /*position:fixed;*/
+    /*top:20px;*/
+}
+
+.text{
+    word-wrap: break-word;
+
+}

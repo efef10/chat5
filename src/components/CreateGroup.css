@@ -1,0 +1,33 @@
+#createGroup{
+    margin:5% 25%;
+    border:1px solid #075e54;
+    padding:20px 60px;
+    /*text-align: center;*/
+}
+
+#createGroup input {
+    display:inline-block;
+    margin:auto;
+    width:100%;
+}
+#createGroup span{
+    color:red;
+}
+#selectedGroup{
+    width:100%;
+}
+.field{
+    display: flex;
+    flex-direction: row;
+    margin-bottom:25px;
+    height:10%;
+}
+#labelCombo{
+    width:120px;
+}
+
+.submit{
+    margin:auto;
+    width:50%;
+    height:10%;
+}

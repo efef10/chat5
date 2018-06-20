@@ -1,0 +1,59 @@
+/*Tree css:*/
+#root {
+    height: 100%;
+    width:100%;
+    display:inline-block;
+}
+
+.treeComponent{
+    width:30%;
+    /*background-color: #ffffff;*/
+    background-color: #c9c9c9;
+    padding:5px;
+    box-sizing: border-box;
+    overflow:auto;
+}
+
+
+.tree, .tree li, .tree ul{
+    padding-left: 0;
+}
+
+.tree{
+    margin-top:0;
+    user-select: none;
+}
+
+.tree span{
+    display:inline-block;
+    width:100%;
+    height:100%;
+    border:1px solid #075e54;
+    /*border-radius:10px;*/
+    padding:5px;
+    box-sizing: border-box;
+    /*vertical-align: middle;*/
+}
+
+.tree li{
+    list-style-type: none;
+    margin-top:10px;
+    background-color: #ffffff;
+    display:inline-block;
+    width:100%;
+    height:70px;
+    /*vertical-align: center;*/
+}
+
+
+.tree img{
+    height:100%;
+    border-radius:50%;
+    border:1px solid black;
+    margin-right:10px;
+}
+
+span:focus{
+    background-color:lightblue ;
+    outline: none;
+}

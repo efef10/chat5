@@ -1,0 +1,36 @@
+{
+  "name": "my-app",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@types/express": "^4.16.0",
+    "@types/react-fontawesome": "^1.6.3",
+    "@types/react-router-dom": "^4.2.6",
+    "bourbon": "^5.0.1",
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
+    "font-awesome": "^4.7.0",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
+    "react-fontawesome": "^1.6.1",
+    "react-popup": "^0.9.3",
+    "react-router-dom": "^4.2.2",
+    "react-scripts-ts": "2.16.0",
+    "reactjs-popup": "^1.1.1",
+    "style-loader": "^0.21.0",
+    "ts-loader": "^4.3.0"
+  },
+  "scripts": {
+    "start": "react-scripts-ts start",
+    "build": "react-scripts-ts build",
+    "test": "react-scripts-ts test --env=jsdom",
+    "eject": "react-scripts-ts eject"
+  },
+  "devDependencies": {
+    "@types/jest": "^22.2.3",
+    "@types/node": "^10.1.0",
+    "@types/react": "^16.3.14",
+    "@types/react-dom": "^16.0.5",
+    "typescript": "^2.8.3"
+  }
+}

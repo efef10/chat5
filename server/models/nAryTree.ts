@@ -174,6 +174,71 @@ export class nAryTree implements INAryTree{
         return deletedConnector;
     }
 
+    public async getTree(){
+        let myRoot;
+        myRoot=new Group(123,"gh",[],null);
+        let myTree={};
+        let groups = await groupsDB.getData();
+        let connectors = await groupsToUsersDB.getData();
+
+        let connectorsWithNames = connectors.map((connector)=>{
+            if(connector.type === "group"){
+                for(let group of groups){
+                    if(group.id === connector.childId){
+                        return {type:connector.type,childId:connector.childId,parentId:connector.parentId,name:group.name};
+                    }
+                }
+            }
+            else{//fixme fetch users names
+
+                return connector;
+            }
+            // return "";
+        });
+
+        for(let connector of connectorsWithNames){
+            if(connector.parentId===""){
+                myRoot = new Group(connector.childId,connector.name,[],null);
+            }
+            else if(!myTree[connector.parentId]){
+                if(connector.type === "user"){
+                    myTree[connector.parentId] = [new User(connector.childId,"user1",23,"")]
+                }
+                else{
+                    myTree[connector.parentId] = [new Group(connector.childId,connector.name,[],connector.parentId)]
+                }
+            }
+            else{
+                if(connector.type === "user"){
+                    myTree[connector.parentId].push(new User(connector.childId,"user1",23,""));
+                    //fixme
+                }
+                else {
+                    myTree[connector.parentId].push(new Group(connector.childId, connector.name, [], connector.parentId))
+                }
+            }
+        }
+        this.generateTree(myRoot,myTree);
+        return myRoot;
+    }
+
+    public generateTree(group:Group,tmpTree:any){
+        let currentGroup = group;
+        let children = tmpTree[currentGroup.getId()];
+        // let childrenToGroups = children.map((child)=>{
+        //     groups.getData(child)
+        // })
+        if(!!children){
+            currentGroup.setChildren(children)
+            for(let child of children){
+                if(child.type === "user"){
+                    return
+                }
+                this.generateTree(child,tmpTree)
+            }
+        }
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     public allGroupsOfUser(userName:string, arr?:Group[], currentGroup?:Group|null){

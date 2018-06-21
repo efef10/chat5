@@ -44,6 +44,11 @@ export class Api{
         return this.post(`/groups/${toGroupID}/connectors`,{connectorId:connectorId,type:type});
     }
 
+    static getTree(){
+        return this.get('/groups/tree');
+    }
+
+
     static get(url:string){
         return fetch(Api.baseURL + url,{
             method:"GET"

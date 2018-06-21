@@ -14,6 +14,7 @@ import CreateUser from "./components/CreateUser";
 import Edit from "./components/Edit";
 import CreateGroup from "./components/CreateGroup";
 import EditGroup from "./components/EditGroup";
+import {Group} from './models/Group';
 // import DisplayList from "./components/DisplayList";
 // import Management from "./containers/Management";
 
@@ -22,7 +23,7 @@ interface IAppState{
     groups:object[],
     users:object[],
     children:object[],
-
+    tree:Group[],
 
 }
 
@@ -37,10 +38,11 @@ class App extends React.Component<{},IAppState> {
             showPopup: false,
             groups:[],
             users:[],
+            tree:[],
             children:[],
         };
 
-        appService.subscribe((data:any)=>{
+        appService.subscribe((data:{groups:object[],users:object[],tree:Group[]})=>{
             if(data.users!==this.state.users){
                 this.setState({
                     users:data.users
@@ -51,12 +53,19 @@ class App extends React.Component<{},IAppState> {
                     groups: data.groups
                 });
             }
+            if(data.tree!==this.state.tree) {
+                this.setState({
+                    tree: data.tree
+                });
+            }
         })
     }
 
     componentDidMount(){
-            appService.getUsers();
-            appService.getGroups();
+        appService.getUsers();
+        appService.getGroups();
+        appService.getTree();
+        // appService.getTree();
         window.onclick = (event:any)=> {
             if (event.target && !event.target.matches('.dropbtn')) {
                 var dropdowns = this.myDropdown;
@@ -155,6 +164,7 @@ class App extends React.Component<{},IAppState> {
               <Link to={appService.getLoggedUser()===""?"/login":"/"}><div id='logIn' onClick={appService.getLoggedUser()===""?this.togglePopup:this.logOut}>{appService.getLoggedUser()===""?"Log In":"Log Out"}</div></Link>
 
           </div>
+          <button onClick={()=>{appService.getTree()}}>test</button>
           <Route path='/login' render={this.renderLogIn}/>
           <Switch>
               <Route exact={true} path='/groups/:group/add' component={AddUserToGroup}/>
@@ -164,7 +174,7 @@ class App extends React.Component<{},IAppState> {
               <Route exact={true} path='/users/:id' render={this.edit}/>
               <Route exact={true} path='/groups/new' render={this.renderCreateGroup}/>
               <Route exact={true} path='/groups/:id' render={this.editGroup}/>
-              <MainData groups={this.state.groups}>
+              <MainData groups={this.state.tree}>
                   <div>
                       <Route exact={true} path='/login' render={this.renderLogIn}/>
                   </div>

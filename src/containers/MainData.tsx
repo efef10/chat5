@@ -1,12 +1,13 @@
 import * as React from "react";
 import DataFlow from './DataFlow';
+import {Group} from '../models/Group';
 import TreeComponent from '../components/TreeComponent';
-import {appService} from "../models/AppStore";
+// import {appService} from "../models/AppStore";
 // import {Redirect} from 'react-router-dom';
 // import Popup from '../components/PopUp';
 
 interface IMainDataProps{
-    groups:object[]
+    groups:Group[]
 }
 
 class MainData extends React.Component<IMainDataProps,{}>{
@@ -25,7 +26,8 @@ class MainData extends React.Component<IMainDataProps,{}>{
                     <TreeComponent groups={this.props.groups}/>
                 </div>
                 <div className='window'>
-                    <DataFlow messages={appService.getMessages()}/>
+                    <DataFlow messages={[]}/>
+                    {/*<DataFlow messages={appService.getMessages()}/>*/}
                 </div>
             </div>
         )

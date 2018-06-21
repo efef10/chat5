@@ -1,6 +1,6 @@
 import * as React from 'react'
 import {Link} from 'react-router-dom';
-import {appService} from "../models/AppStore";
+// import {appService} from "../models/AppStore";
 import './Popup.css';
 
 // this.props.match.params.id
@@ -16,12 +16,12 @@ class Popup extends React.Component{
     private hint:any
 
     public logUser=()=>{
-        if(appService.auth(this.userName.value,this.password.value)){
-            appService.logUser(this.userName.value);
-        }
-        else{
-            alert("user name or password is not correct");
-        }
+        // if(appService.auth(this.userName.value,this.password.value)){
+        //     appService.logUser(this.userName.value);
+        // }
+        // else{
+        //     alert("user name or password is not correct");
+        // }
     }
 
     public pStyle = {

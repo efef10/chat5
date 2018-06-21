@@ -1,1 +1,28 @@
-{"users":[{"name":"efrat","age":25,"password":"efrat","type":"user","message":[],"id":"a19ap370gjio62vmk"},{"name":"eli","age":1,"password":"eli","type":"user","message":[],"id":"a19ap370gjio62vml"},{"name":"bambi","age":3,"password":"bambi","type":"user","message":[],"id":"a19ap370gjio62vmm"}]}
+{
+  "users": [
+    {
+      "name": "efrat",
+      "age": 25,
+      "password": "efrat",
+      "type": "user",
+      "message": [],
+      "id": "7"
+    },
+    {
+      "name": "eli",
+      "age": 1,
+      "password": "eli",
+      "type": "user",
+      "message": [],
+      "id": "8"
+    },
+    {
+      "name": "bambi",
+      "age": 3,
+      "password": "bambi",
+      "type": "user",
+      "message": [],
+      "id": "9"
+    }
+  ]
+}

@@ -9,8 +9,8 @@ class Send extends React.Component{
     }
 
     public addMessage =(e:any)=>{
-        appService.addMessage(e.target.previousSibling.value);
-        this.input.value="";
+        // appService.addMessage(e.target.previousSibling.value);
+        // this.input.value="";
     }
 
     public render(){

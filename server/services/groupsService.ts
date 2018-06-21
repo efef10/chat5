@@ -46,6 +46,11 @@ class GroupsService{
         const myConnector = await this.chat[0].getGroups().addConnector(groupId,connectorId,type);
         return myConnector;
     }
+
+    getTree=async()=>{
+        const myTree = await this.chat[0].getGroups().getTree();
+        return myTree;
+    }
 }
 
 export default GroupsService;

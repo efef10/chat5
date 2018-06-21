@@ -1,11 +1,11 @@
 import {Group} from './Group';
-import {User} from './User';
+// import {User} from './User';
 import {appService} from "../models/AppStore";
 import group from '../pic/group.png';
 
-interface myGroupSpan extends HTMLSpanElement{
-    path:string
-}
+// interface myGroupSpan extends HTMLSpanElement{
+//     path:string
+// }
 
 function TreeChat(element:HTMLElement) {
     // e:React.KeyboardEvent<HTMLDivElement>
@@ -30,8 +30,8 @@ function TreeChat(element:HTMLElement) {
                     if(!!span){
                         span.focus();
                         if (span.classList.contains("group")) {
-                            let target = span as myGroupSpan;
-                            appService.selectGroup(target.path)
+                            // let target = span as myGroupSpan;
+                            // appService.selectGroup(target.path)
                             // this.props.groupSelected(target.path);//
                         }
                         else {
@@ -107,8 +107,8 @@ function TreeChat(element:HTMLElement) {
             }
             target.focus();
             if (target.classList.contains("group")) {
-                let path = (target as myGroupSpan).path;
-                appService.selectGroup(path)
+                // let path = (target as myGroupSpan).path;
+                // appService.selectGroup(path)
             }
             else {
                 appService.userSelected(target.innerText)
@@ -130,7 +130,7 @@ function TreeChat(element:HTMLElement) {
                 if(item.type !== "group"){
                     span.innerHTML = (item.name);
                     let img = document.createElement("img");
-                    img.setAttribute("src",require("../pic/"+(item as User).getProfileImg()));
+                    // img.setAttribute("src",require("../pic/"+(item as User).getProfileImg()));//fixme
                     span.insertBefore(img, span.childNodes[0]);
                 }
                 span.setAttribute("tabindex",level.toString());
@@ -138,7 +138,7 @@ function TreeChat(element:HTMLElement) {
                 li.appendChild(span);
                 ul.appendChild(li);
                 if (item.type === "group") {
-                    (span as myGroupSpan).path = (item as Group).showGroupPath();
+                    // (span as myGroupSpan).path = (item as Group).showGroupPath(); fixme maybe
                     span.innerHTML = (item.name);
                     span.classList.add("group");
                     let img = document.createElement("img");

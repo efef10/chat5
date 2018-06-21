@@ -34,6 +34,9 @@ var Api = /** @class */ (function () {
     Api.addConnector = function (connectorId, toGroupID, type) {
         return this.post("/groups/" + toGroupID + "/connectors", { connectorId: connectorId, type: type });
     };
+    Api.getTree = function () {
+        return this.get('/groups/tree');
+    };
     Api.get = function (url) {
         return fetch(Api.baseURL + url, {
             method: "GET"

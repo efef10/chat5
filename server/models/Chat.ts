@@ -15,11 +15,11 @@ export class Chat{
         this.users = new Users();
 
         // example initials
-        this.groups.deleteTree();
-        this.users.deleteAllUsers();
-        this.users.addUser({name:"efrat",age:25,password:"efrat"});
-        this.users.addUser({name:"eli",age:1,password:"eli"});
-        this.users.addUser({name:"bambi",age:3,password:"bambi"});
+        // this.groups.deleteTree();
+        // this.users.deleteAllUsers();
+        // this.users.addUser({name:"efrat",age:25,password:"efrat"});
+        // this.users.addUser({name:"eli",age:1,password:"eli"});
+        // this.users.addUser({name:"bambi",age:3,password:"bambi"});
         // this.users.addUser("simba",3,"simba","simba.jpg");
         // this.users.addUser("user1",3,"user1");
         // this.users.addUser("user2",3,"user2");
@@ -34,7 +34,7 @@ export class Chat{
         // this.addUserToGroup("efrat","jsbootcamp3");
         // this.addUserToGroup("eli","jsbootcamp3");
         // this.addUserToGroup("bambi","jsbootcamp3");
-        this.groups.addGroup("efffff","");
+        // this.groups.addGroup("efffff","");
         // this.addGroup("react",-1);
         // this.addUserToGroup("efrat","jsbootcamp3>react");
         // // this.addUserToGroup("eli","jsbootcamp3>react");

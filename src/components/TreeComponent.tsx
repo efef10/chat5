@@ -15,7 +15,7 @@ interface ITreeComponentState{
 }
 
 interface ITreeComponentProps{
-    groups:object[]
+    groups:Group[]
 }
 
 class TreeComponent extends React.Component<ITreeComponentProps,ITreeComponentState>{
@@ -27,6 +27,8 @@ class TreeComponent extends React.Component<ITreeComponentProps,ITreeComponentSt
         this.state = {groups:appService.groupsToDisplay()};
     }
 
+
+
     public shouldComponentUpdate(p:any, q:any){
         if(appService.treeShouldUpdate()){
             appService.treeUpdated();
@@ -35,9 +37,13 @@ class TreeComponent extends React.Component<ITreeComponentProps,ITreeComponentSt
         return false;
     }
 
-    public componentDidMount(){
+    public async componentDidMount(){
+
         this.tree = TreeChat(this.element);
-        this.tree.load(appService.groupsToDisplay());
+        // this.tree.load(this.props.groups);
+        let tree = await appService.getTree();
+        debugger
+        this.tree.load(tree);
     }
 
     public render(){

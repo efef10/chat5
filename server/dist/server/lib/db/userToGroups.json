@@ -1,1 +1,44 @@
-{"userToGroups":[{"type":"group","parentId":"","childId":"a19ap370gjio62vmj"},{"type":"group","parentId":"a19ap370gjio62vmj","childId":"a19ap370gjio633u7"},{"type":"group","parentId":"a19ap370gjio62vmj","childId":"a19ap370gjio634dj"},{"type":"user","parentId":"a19ap370gjio634dj","childId":"a19ap370gjio62vmk"}]}
+{
+  "userToGroups": [
+    {
+      "type": "group",
+      "parentId": "",
+      "childId": "1"
+    },
+    {
+      "type": "group",
+      "parentId": "1",
+      "childId": "2"
+    },
+    {
+      "type": "group",
+      "parentId": "1",
+      "childId": "3"
+    },
+    {
+      "type": "group",
+      "parentId": "3",
+      "childId": "4"
+    },
+    {
+      "type": "group",
+      "parentId": "3",
+      "childId": "5"
+    },
+    {
+      "type": "user",
+      "parentId": "5",
+      "childId": "7"
+    },
+    {
+      "type": "user",
+      "parentId": "5",
+      "childId": "8"
+    },
+    {
+      "type": "user",
+      "parentId": "4",
+      "childId": "9"
+    }
+  ]
+}

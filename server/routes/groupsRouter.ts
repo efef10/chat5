@@ -5,6 +5,7 @@ const groupsRouter = express.Router();
 
 groupsRouter.get('/',controllers.getGroups);
 groupsRouter.get('/:groupId/connectors',controllers.getConnectors)
+groupsRouter.get('/:tree',controllers.getTree)
 
 groupsRouter.post('/:groupId',controllers.addGroup);
 groupsRouter.post('/:groupId/connectors',controllers.addConnector)

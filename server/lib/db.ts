@@ -64,30 +64,6 @@ export class DB{
 
     }
 
-    // editData(objID:string, data:any){
-    //     this.readFromJson();
-    //     return new Promise((resolve,reject)=>{
-    //         let myObject;
-    //         for(let obj of this.myData[this.fileName]){
-    //             if(obj.id === objID){
-    //                 myObject=obj;
-    //             }
-    //         }
-    //
-    //         let index = this.myData[this.fileName].indexOf(myObject);
-    //         if(myObject.type === "user"){
-    //             this.myData[this.fileName][index].password = data.password;
-    //             this.myData[this.fileName][index].age = data.age;
-    //         }
-    //         else{
-    //             this.myData[this.fileName][index].children = data.children;
-    //             //fixme
-    //         }
-    //         this.writeToJson();
-    //         resolve(myObject);
-    //     })
-    // }
-
     editData(conditions:{field:string,value:any}[],updates:{field:string,value:any}[]){
         this.readFromJson();
         return new Promise((resolve,reject)=>{

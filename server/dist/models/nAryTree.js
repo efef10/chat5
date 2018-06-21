@@ -318,7 +318,7 @@ var nAryTree = /** @class */ (function () {
                                     }
                                 }
                             }
-                            else {
+                            else { //fixme fetch users names
                                 return connector;
                             }
                             // return "";
@@ -326,12 +326,11 @@ var nAryTree = /** @class */ (function () {
                         for (_i = 0, connectorsWithNames_1 = connectorsWithNames; _i < connectorsWithNames_1.length; _i++) {
                             connector = connectorsWithNames_1[_i];
                             if (connector.parentId === "") {
-                                // let groupName = groups.getDate(id=parentId)
                                 myRoot = new Group_1.Group(connector.childId, connector.name, [], null);
                             }
                             else if (!myTree[connector.parentId]) {
                                 if (connector.type === "user") {
-                                    //fixme
+                                    myTree[connector.parentId] = [new User_1.User(connector.childId, "user1", 23, "")];
                                 }
                                 else {
                                     myTree[connector.parentId] = [new Group_1.Group(connector.childId, connector.name, [], connector.parentId)];
@@ -339,6 +338,7 @@ var nAryTree = /** @class */ (function () {
                             }
                             else {
                                 if (connector.type === "user") {
+                                    myTree[connector.parentId].push(new User_1.User(connector.childId, "user1", 23, ""));
                                     //fixme
                                 }
                                 else {

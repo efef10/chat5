@@ -38,6 +38,11 @@ export async function addConnector (req: Request, res: Response) {
     res.json(group);
 }
 
+export async function getTree (req: Request, res: Response) {
+    const tree = await groupsService.getTree();
+    res.json(tree);
+}
+
 
 
 

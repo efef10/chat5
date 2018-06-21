@@ -15,7 +15,7 @@ export class Api{
     }
 
     static editUser(userId:string,updates:{field:string,value:any}[]){
-        return this.put('/users/'+userId,updates);
+        return this.put('/users/'+userId,{updates});
     }
 
     /////////////////////////////////////////////
@@ -64,6 +64,7 @@ export class Api{
     }
 
     static put(url:string,body:object){
+        debugger
         return fetch(Api.baseURL + url,{
             method:"PUT",
             body:JSON.stringify(body),

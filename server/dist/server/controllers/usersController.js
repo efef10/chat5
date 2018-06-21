@@ -74,7 +74,7 @@ function editUser(req, res) {
         var user;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, usersService.editUser(req.params.userId, req.body)];
+                case 0: return [4 /*yield*/, usersService.editUser(req.params.userId, req.body.updates)];
                 case 1:
                     user = _a.sent();
                     res.json(user);

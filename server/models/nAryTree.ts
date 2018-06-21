@@ -74,27 +74,43 @@ export class nAryTree implements INAryTree{
             return connector.parentId === toGroupID;
         })
 
-        groupsDB.addData(newGroup);
+        await groupsDB.addData(newGroup);
         let connector = {type:"group",parentId:toGroupID,childId:newGroup.id};
-        groupsToUsersDB.addData(connector);
+        await groupsToUsersDB.addData(connector);
 
         if(myConnectors.length>0 && myConnectors[0].type ==="user"){
-
-            //=== update the new parent of the users:  ===
-            await groupsToUsersDB.editData([{"field":"parentId","value":toGroupID}],[{"field":"parentId","value":newGroup.id}])
-            //============================================
-
             let newGroupOthers = {type:"group",name:"others",id:uniqid()}
             await groupsDB.addData(newGroupOthers);
             await groupsToUsersDB.addData({type:"group",parentId:toGroupID,childId:newGroupOthers.id});
-
+            //=== update the new parent of the users:  ===
+            await groupsToUsersDB.editData([{"field":"parentId","value":toGroupID},{"field":"type","value":"user"}],[{"field":"parentId","value":newGroupOthers.id}])
+            //============================================
         }
         return newGroup;
     }
 
     public async addConnector(groupId:string,connectorId:string,type:string){
-        let newConnector = {type:type,parentId:groupId,childId:connectorId}
-        return await groupsToUsersDB.addData(newConnector);
+        if(type === "user"){
+            let connectors = await groupsToUsersDB.getData();
+            let myConnectors = connectors.filter((connector)=>{
+                return connector.parentId === groupId;
+            })
+
+            let newConnector
+            if(myConnectors.length>0 && myConnectors[0].type ==="group") {
+                let newGroupOthers = {type:"group",name:"others",id:uniqid()}
+                await groupsDB.addData(newGroupOthers);
+                await groupsToUsersDB.addData({type:"group",parentId:groupId,childId:newGroupOthers.id});
+                newConnector = {type:type,parentId:newGroupOthers.id,childId:connectorId};
+            }
+            else{
+                newConnector = {type:type,parentId:groupId,childId:connectorId};
+            }
+            return await groupsToUsersDB.addData(newConnector);
+        }
+        else{
+            return {message:"not supported yet"};
+        }
     }
 
     public getGroupById(groupId:number,currentGroup?:Group):Group|null{

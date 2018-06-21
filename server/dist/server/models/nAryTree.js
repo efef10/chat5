@@ -109,7 +109,7 @@ var nAryTree = /** @class */ (function () {
     };
     nAryTree.prototype.addGroup = function (newGroupName, toGroupID) {
         return __awaiter(this, void 0, void 0, function () {
-            var newGroup, connectors, myConnectors, connector, _i, myConnectors_1, connector_1, newGroupOthers;
+            var newGroup, connectors, myConnectors, connector, newGroupOthers;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -126,32 +126,64 @@ var nAryTree = /** @class */ (function () {
                         myConnectors = connectors.filter(function (connector) {
                             return connector.parentId === toGroupID;
                         });
-                        groupsDB.addData(newGroup);
-                        connector = { type: "group", parentId: toGroupID, childId: newGroup.id };
-                        groupsToUsersDB.addData(connector);
-                        if (!(myConnectors.length > 0 && myConnectors[0].type === "user")) return [3 /*break*/, 5];
-                        for (_i = 0, myConnectors_1 = myConnectors; _i < myConnectors_1.length; _i++) {
-                            connector_1 = myConnectors_1[_i];
-                        }
-                        newGroupOthers = { type: "group", name: "others", id: uniqid() };
-                        return [4 /*yield*/, groupsDB.addData(newGroupOthers)];
+                        return [4 /*yield*/, groupsDB.addData(newGroup)];
                     case 4:
                         _a.sent();
-                        _a.label = 5;
-                    case 5: return [2 /*return*/, newGroup];
+                        connector = { type: "group", parentId: toGroupID, childId: newGroup.id };
+                        return [4 /*yield*/, groupsToUsersDB.addData(connector)];
+                    case 5:
+                        _a.sent();
+                        if (!(myConnectors.length > 0 && myConnectors[0].type === "user")) return [3 /*break*/, 9];
+                        newGroupOthers = { type: "group", name: "others", id: uniqid() };
+                        return [4 /*yield*/, groupsDB.addData(newGroupOthers)];
+                    case 6:
+                        _a.sent();
+                        return [4 /*yield*/, groupsToUsersDB.addData({ type: "group", parentId: toGroupID, childId: newGroupOthers.id })];
+                    case 7:
+                        _a.sent();
+                        //=== update the new parent of the users:  ===
+                        return [4 /*yield*/, groupsToUsersDB.editData([{ "field": "parentId", "value": toGroupID }, { "field": "type", "value": "user" }], [{ "field": "parentId", "value": newGroupOthers.id }])
+                            //============================================
+                        ];
+                    case 8:
+                        //=== update the new parent of the users:  ===
+                        _a.sent();
+                        _a.label = 9;
+                    case 9: return [2 /*return*/, newGroup];
                 }
             });
         });
     };
     nAryTree.prototype.addConnector = function (groupId, connectorId, type) {
         return __awaiter(this, void 0, void 0, function () {
-            var newConnector;
+            var connectors, myConnectors, newConnector, newGroupOthers;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        if (!(type === "user")) return [3 /*break*/, 7];
+                        return [4 /*yield*/, groupsToUsersDB.getData()];
+                    case 1:
+                        connectors = _a.sent();
+                        myConnectors = connectors.filter(function (connector) {
+                            return connector.parentId === groupId;
+                        });
+                        newConnector = void 0;
+                        if (!(myConnectors.length > 0 && myConnectors[0].type === "group")) return [3 /*break*/, 4];
+                        newGroupOthers = { type: "group", name: "others", id: uniqid() };
+                        return [4 /*yield*/, groupsDB.addData(newGroupOthers)];
+                    case 2:
+                        _a.sent();
+                        return [4 /*yield*/, groupsToUsersDB.addData({ type: "group", parentId: groupId, childId: newGroupOthers.id })];
+                    case 3:
+                        _a.sent();
+                        newConnector = { type: type, parentId: newGroupOthers.id, childId: connectorId };
+                        return [3 /*break*/, 5];
+                    case 4:
                         newConnector = { type: type, parentId: groupId, childId: connectorId };
-                        return [4 /*yield*/, groupsToUsersDB.addData(newConnector)];
-                    case 1: return [2 /*return*/, _a.sent()];
+                        _a.label = 5;
+                    case 5: return [4 /*yield*/, groupsToUsersDB.addData(newConnector)];
+                    case 6: return [2 /*return*/, _a.sent()];
+                    case 7: return [2 /*return*/, { message: "not supported yet" }];
                 }
             });
         });

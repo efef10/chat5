@@ -99,49 +99,13 @@ var DB = /** @class */ (function () {
             resolve(true);
         });
     };
-    DB.prototype.editData = function (objID, data) {
-        var _this = this;
-        this.readFromJson();
-        return new Promise(function (resolve, reject) {
-            var myObject;
-            for (var _i = 0, _a = _this.myData[_this.fileName]; _i < _a.length; _i++) {
-                var obj = _a[_i];
-                if (obj.id === objID) {
-                    myObject = obj;
-                }
-            }
-            var index = _this.myData[_this.fileName].indexOf(myObject);
-            if (myObject.type === "user") {
-                _this.myData[_this.fileName][index].password = data.password;
-                _this.myData[_this.fileName][index].age = data.age;
-            }
-            else {
-                _this.myData[_this.fileName][index].children = data.children;
-                //fixme
-            }
-            _this.writeToJson();
-            resolve(myObject);
-        });
-    };
-    // editData(conditions:{field:string,value:any}[],   objID:string, data:any){
-    //     [{"id":"123",length:5}]
-    //
+    // editData(objID:string, data:any){
     //     this.readFromJson();
     //     return new Promise((resolve,reject)=>{
-    //         let myObjects=[];
-    //         for(let obj of this.myData[this.fileName]) {
-    //             for (let field in conditions) {
-    //                 if(obj[field]!==conditions[field]){
-    //                     break;
-    //                 }
-    //             }
-    //             myObjects.push(obj);
-    //         }
-    //
+    //         let myObject;
     //         for(let obj of this.myData[this.fileName]){
-    //
     //             if(obj.id === objID){
-    //                 myObjects.push(obj);
+    //                 myObject=obj;
     //             }
     //         }
     //
@@ -158,30 +122,7 @@ var DB = /** @class */ (function () {
     //         resolve(myObject);
     //     })
     // }
-    // deleteData(objId:string,keyField:string,anotherField?:string){
-    //     return new Promise((resolve,reject)=>{
-    //         this.readFromJson().then(()=>{
-    //             let myObject;
-    //             for(let obj of this.myData[this.fileName]){
-    //                 if(obj[keyField] === objId){
-    //                     if(!anotherField || obj["parentId"] === anotherField){
-    //                         myObject=obj;
-    //                     }
-    //                 }
-    //             }
-    //
-    //             let index = this.myData[this.fileName].indexOf(myObject);
-    //             this.myData[this.fileName].splice(index,1);
-    //
-    //             this.writeToJson();
-    //             if(!myObject){
-    //                 resolve({});
-    //             }
-    //             resolve(myObject);
-    //         });
-    //     })
-    // }
-    DB.prototype.deleteData = function (conditions) {
+    DB.prototype.editData = function (conditions, updates) {
         var _this = this;
         this.readFromJson();
         return new Promise(function (resolve, reject) {
@@ -202,6 +143,38 @@ var DB = /** @class */ (function () {
             }
             for (var _c = 0, myObjects_1 = myObjects; _c < myObjects_1.length; _c++) {
                 var obj = myObjects_1[_c];
+                var index = _this.myData[_this.fileName].indexOf(obj);
+                for (var _d = 0, updates_1 = updates; _d < updates_1.length; _d++) {
+                    var update = updates_1[_d];
+                    _this.myData[_this.fileName][index][update["field"]] = update["value"];
+                    _this.writeToJson();
+                    _this.readFromJson();
+                }
+            }
+            resolve(myObjects);
+        });
+    };
+    DB.prototype.deleteData = function (conditions) {
+        var _this = this;
+        this.readFromJson();
+        return new Promise(function (resolve, reject) {
+            var myObjects = [];
+            for (var _i = 0, _a = _this.myData[_this.fileName]; _i < _a.length; _i++) {
+                var obj = _a[_i];
+                var objInConditions = true;
+                for (var _b = 0, conditions_2 = conditions; _b < conditions_2.length; _b++) {
+                    var condition = conditions_2[_b];
+                    if (obj[condition["field"]] !== condition["value"]) {
+                        objInConditions = false;
+                        break;
+                    }
+                }
+                if (objInConditions) {
+                    myObjects.push(obj);
+                }
+            }
+            for (var _c = 0, myObjects_2 = myObjects; _c < myObjects_2.length; _c++) {
+                var obj = myObjects_2[_c];
                 var index = _this.myData[_this.fileName].indexOf(obj);
                 _this.myData[_this.fileName].splice(index, 1);
                 _this.writeToJson();

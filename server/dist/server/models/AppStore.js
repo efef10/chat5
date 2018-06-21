@@ -57,12 +57,12 @@ var AppService = /** @class */ (function () {
             _this.onStoreChanged();
         });
     };
-    AppService.prototype.editUser = function (user) {
-        return api_1.Api.editUser(user)
-            .then(function (user) {
-            return user;
-        });
-    };
+    // editUser(user:any){
+    //     return Api.editUser(user)
+    //         .then((user)=>{
+    //             return user;
+    //         })
+    // }
     AppService.prototype.addUser = function (username, password, age, imageUrl) {
         return api_1.Api.addUser({ name: username, password: password, age: age, imageUrl: imageUrl || "" })
             .then(function (user) {

@@ -12,8 +12,8 @@ var Api = /** @class */ (function () {
     Api.deleteUser = function (userId) {
         return this.delete("/users/" + userId, { type: "user" });
     };
-    Api.editUser = function (user) {
-        return this.put('/users/' + user.id, user);
+    Api.editUser = function (userId, updates) {
+        return this.put('/users/' + userId, { updates: updates });
     };
     /////////////////////////////////////////////
     Api.getGroups = function () {
@@ -51,6 +51,7 @@ var Api = /** @class */ (function () {
             .then(function (res) { return res.json(); });
     };
     Api.put = function (url, body) {
+        debugger;
         return fetch(Api.baseURL + url, {
             method: "PUT",
             body: JSON.stringify(body),

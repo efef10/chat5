@@ -107,7 +107,7 @@ export class DB{
 
             for(let obj of myObjects){
                 let index = this.myData[this.fileName].indexOf(obj);
-                for(let update in updates){
+                for(let update of updates){
                     this.myData[this.fileName][index][update["field"]] = update["value"];
                     this.writeToJson();
                     this.readFromJson();

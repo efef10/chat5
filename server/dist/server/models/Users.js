@@ -73,8 +73,8 @@ var Users = /** @class */ (function () {
         usersDB.deleteFileContent();
         // return status;
     };
-    Users.prototype.editUser = function (userId, body) {
-        return usersDB.editData(userId, body);
+    Users.prototype.editUser = function (userId, updates) {
+        return usersDB.editData([{ "field": "id", "value": userId }], updates);
     };
     Users.prototype.removeUser = function (userId) {
         return usersDB.deleteData([{ "field": "id", "value": userId }]);

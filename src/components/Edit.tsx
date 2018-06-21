@@ -37,7 +37,7 @@ class Edit extends React.Component<IEditProps,IEditState>{
     submit=()=>{
         // const username = this.props.location.state.object.name;
         const id = this.props.location.state.object.id;
-       appService.editUser(id,[{"field":"age","value":this.state.age},{"field":"password","value":this.state.password}])
+       appService.editUser(id,[{"field":"age","value":Number(this.state.age)},{"field":"password","value":this.state.password}])
     }
 
     render(){

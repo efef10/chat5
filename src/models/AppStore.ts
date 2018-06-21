@@ -57,6 +57,7 @@ export class AppService {
     }
 
     editUser(userId:string,updates:{field:string,value:any}[]){
+        debugger
         return Api.editUser(userId,updates)
             .then((user)=>{
                 Api.getUsers()
@@ -117,7 +118,15 @@ export class AppService {
     }
 
     addUserToGroup(userId:string,toGroupID:string){
-        return Api.addConnector(userId,toGroupID,"user");
+        return Api.addConnector(userId,toGroupID,"user")
+            .then((connector)=>{
+                Api.getGroups()
+                    .then((groups)=>{
+                        this.groups=groups;
+                        this.onStoreChanged();
+                    });
+                return connector;
+            })
     }
 
     async allUsersOfGroup(groupId:string){

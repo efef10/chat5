@@ -329,7 +329,8 @@ var nAryTree = /** @class */ (function () {
                                 myRoot = new Group_1.Group(connector.childId, connector.name, [], null);
                             }
                             else if (!myTree[connector.parentId]) {
-                                if (connector.type === "user") {
+                                if (connector.type == "user") {
+                                    // myTree[connector.parentId] = [new Group(connector.childId,"bbb",[],connector.parentId)]
                                     myTree[connector.parentId] = [new User_1.User(connector.childId, "user1", 23, "")];
                                 }
                                 else {
@@ -337,7 +338,7 @@ var nAryTree = /** @class */ (function () {
                                 }
                             }
                             else {
-                                if (connector.type === "user") {
+                                if (connector.type == "user") {
                                     myTree[connector.parentId].push(new User_1.User(connector.childId, "user1", 23, ""));
                                     //fixme
                                 }

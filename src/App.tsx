@@ -164,7 +164,6 @@ class App extends React.Component<{},IAppState> {
               <Link to={appService.getLoggedUser()===""?"/login":"/"}><div id='logIn' onClick={appService.getLoggedUser()===""?this.togglePopup:this.logOut}>{appService.getLoggedUser()===""?"Log In":"Log Out"}</div></Link>
 
           </div>
-          <button onClick={()=>{appService.getTree()}}>test</button>
           <Route path='/login' render={this.renderLogIn}/>
           <Switch>
               <Route exact={true} path='/groups/:group/add' component={AddUserToGroup}/>

@@ -14,16 +14,6 @@
       "type": "group",
       "name": "g3",
       "id": "3"
-    },
-    {
-      "type": "group",
-      "name": "g4",
-      "id": "4"
-    },
-    {
-      "type": "group",
-      "name": "g5",
-      "id": "5"
     }
   ]
 }

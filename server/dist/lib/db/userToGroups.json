@@ -16,29 +16,14 @@
       "childId": "3"
     },
     {
-      "type": "group",
-      "parentId": "3",
-      "childId": "4"
-    },
-    {
-      "type": "group",
-      "parentId": "3",
-      "childId": "5"
-    },
-    {
       "type": "user",
-      "parentId": "5",
+      "parentId": "3",
       "childId": "7"
     },
     {
       "type": "user",
-      "parentId": "5",
+      "parentId": "3",
       "childId": "8"
-    },
-    {
-      "type": "user",
-      "parentId": "4",
-      "childId": "9"
     }
   ]
 }

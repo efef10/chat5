@@ -195,13 +195,14 @@ export class nAryTree implements INAryTree{
             }
             // return "";
         });
-
         for(let connector of connectorsWithNames){
             if(connector.parentId===""){
                 myRoot = new Group(connector.childId,connector.name,[],null);
             }
             else if(!myTree[connector.parentId]){
-                if(connector.type === "user"){
+                if(connector.type == "user"){
+                    // myTree[connector.parentId] = [new Group(connector.childId,"bbb",[],connector.parentId)]
+
                     myTree[connector.parentId] = [new User(connector.childId,"user1",23,"")]
                 }
                 else{
@@ -209,7 +210,7 @@ export class nAryTree implements INAryTree{
                 }
             }
             else{
-                if(connector.type === "user"){
+                if(connector.type == "user"){
                     myTree[connector.parentId].push(new User(connector.childId,"user1",23,""));
                     //fixme
                 }

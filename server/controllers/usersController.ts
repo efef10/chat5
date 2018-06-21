@@ -1,5 +1,5 @@
 import {UsersService} from '../services';
-// import {DB} from '../lib/db';
+// import {DB} from '../db/db';
 import {Request, Response} from "express";
 
 // const usersDB = new DB("users");

@@ -5,7 +5,8 @@ import * as uniqid from 'uniqid';
 
 const groupsDB = new DB("groups");
 const groupsToUsersDB = new DB("userToGroups");
-
+const usersDB = new DB("users");
+const messagesDB = new DB("messages");
 
 
 interface INAryTree{
@@ -174,11 +175,27 @@ export class nAryTree implements INAryTree{
         return deletedConnector;
     }
 
+    public async getMessages(groupId:string){
+        let users = await usersDB.getData();
+        let messages = await messagesDB.getData([{field:"to",value:groupId},{field:"type",value:"group"}]);
+        let myMessages = messages.map((message)=>{
+            for(let user of users){
+                if(user.id===message.writerId){
+                    message.userName = user.name
+                    return message;
+                }
+            }
+            return message;
+        })
+        return myMessages;
+    }
+
     public async getTree(){
         let myRoot;
         myRoot=new Group(123,"gh",[],null);
         let myTree={};
         let groups = await groupsDB.getData();
+        let users = await usersDB.getData();
         let connectors = await groupsToUsersDB.getData();
 
         let connectorsWithNames = connectors.map((connector)=>{
@@ -189,11 +206,14 @@ export class nAryTree implements INAryTree{
                     }
                 }
             }
-            else{//fixme fetch users names
-
-                return connector;
+            else{
+                for(let user of users){
+                    if(user.id === connector.childId){
+                        return {type:connector.type,childId:connector.childId,parentId:connector.parentId,name:user.name,age:user.age};
+                    }
+                }
             }
-            // return "";
+            return connector;
         });
         for(let connector of connectorsWithNames){
             if(connector.parentId===""){
@@ -203,7 +223,7 @@ export class nAryTree implements INAryTree{
                 if(connector.type == "user"){
                     // myTree[connector.parentId] = [new Group(connector.childId,"bbb",[],connector.parentId)]
 
-                    myTree[connector.parentId] = [new User(connector.childId,"user1",23,"")]
+                    myTree[connector.parentId] = [new User(connector.childId,connector.name,connector.age,"")]
                 }
                 else{
                     myTree[connector.parentId] = [new Group(connector.childId,connector.name,[],connector.parentId)]
@@ -211,7 +231,7 @@ export class nAryTree implements INAryTree{
             }
             else{
                 if(connector.type == "user"){
-                    myTree[connector.parentId].push(new User(connector.childId,"user1",23,""));
+                    myTree[connector.parentId].push(new User(connector.childId,connector.name,connector.age,""));
                     //fixme
                 }
                 else {
@@ -238,6 +258,17 @@ export class nAryTree implements INAryTree{
                 this.generateTree(child,tmpTree)
             }
         }
+    }
+
+    public async addMessage(groupId:string,content:string,toUser:string,date:Date){
+        let user = await usersDB.getData([{field:"name",value:toUser}]);
+        if(user.length>0){
+            // const newMessage = {parentId:groupId,type:"group",content,date,toUserId:user[0].id};
+            const newMessage = {writerId:user[0].id,type:"group",content,date,to:groupId}
+            const messageAdded = messagesDB.addData(newMessage)
+            return messageAdded;
+        }
+        return {};
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -289,20 +320,6 @@ export class nAryTree implements INAryTree{
         return allGroups;
 
     }
-
-    // public showGroupPath(group:Group){
-    //     var path = group.getGroupName();
-    //     // while(group.getParent()){
-    //     //     path = group.getParent().getGroupName() + ">" + path;
-    //     //     group = group.getParent();
-    //     // }
-    //     let parent = group.getParent();
-    //     while(parent){
-    //         path = parent.getGroupName() + ">" + path;
-    //         parent = parent.getParent();
-    //     }
-    //     return path;
-    // }
 
     public returnGroupsAndUsers(){
         var myGroup = this.root;
@@ -388,29 +405,6 @@ export class nAryTree implements INAryTree{
         groupsToUsersDB.deleteFileContent();
         this.root = null;
     }
-
-    // public searchGroup(groupName:string, currentGroup?:Group, groups?:string[]){
-    //     var foundGroupsArr = groups || [];
-    //     if(this.root === null){
-    //         return foundGroupsArr;
-    //     }
-    //     var group = currentGroup;
-    //     if(group === undefined){
-    //         group = this.root;
-    //     }
-    //     if(group.getGroupName() === groupName){
-    //         foundGroupsArr.push(this.showGroupPath(group))
-    //     }
-    //     if((!Group.hasChildren(group)) || (Group.getChildren(group)[0] instanceof User)){
-    //         return foundGroupsArr;
-    //     }
-    //     var children = Group.getChildren(group);
-    //     for(var i=0 ; i<children.length; i++){
-    //         this.searchGroup(groupName, children[i] as Group,foundGroupsArr);
-    //     }
-    //     return foundGroupsArr;
-    // }
-
 
 }
 

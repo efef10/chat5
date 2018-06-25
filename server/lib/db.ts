@@ -35,10 +35,29 @@ export class DB{
         })
     }
 
-    getData():Promise<any[]>{
+    getData(conditions?:{field:string,value:any}[]):Promise<any[]>{
         return new Promise((resolve,reject)=>{
             this.readFromJson().then((myData)=>{
-                resolve([...myData[this.fileName]]);
+                if(!!conditions){
+                    let myObjects=[];
+                    for(let obj of this.myData[this.fileName]) {
+                        let objInConditions = true;
+                        for (let condition of conditions) {
+                            if(obj[condition["field"]]!==condition["value"]){
+                                objInConditions=false;
+                                break;
+                            }
+                        }
+                        if(objInConditions){
+                            myObjects.push(obj);
+                        }
+                    }
+                    resolve([...myObjects]);
+                }
+                else{
+                    resolve([...myData[this.fileName]]);
+                }
+
             });
 
         })

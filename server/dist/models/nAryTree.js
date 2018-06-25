@@ -41,6 +41,8 @@ var db_1 = require("../lib/db");
 var uniqid = require("uniqid");
 var groupsDB = new db_1.DB("groups");
 var groupsToUsersDB = new db_1.DB("userToGroups");
+var usersDB = new db_1.DB("users");
+var messagesDB = new db_1.DB("messages");
 var nAryTree = /** @class */ (function () {
     // private treeName:string;
     function nAryTree(groupName) {
@@ -295,9 +297,35 @@ var nAryTree = /** @class */ (function () {
             });
         });
     };
+    nAryTree.prototype.getMessages = function (groupId) {
+        return __awaiter(this, void 0, void 0, function () {
+            var users, messages, myMessages;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, usersDB.getData()];
+                    case 1:
+                        users = _a.sent();
+                        return [4 /*yield*/, messagesDB.getData([{ field: "to", value: groupId }, { field: "type", value: "group" }])];
+                    case 2:
+                        messages = _a.sent();
+                        myMessages = messages.map(function (message) {
+                            for (var _i = 0, users_1 = users; _i < users_1.length; _i++) {
+                                var user = users_1[_i];
+                                if (user.id === message.writerId) {
+                                    message.userName = user.name;
+                                    return message;
+                                }
+                            }
+                            return message;
+                        });
+                        return [2 /*return*/, myMessages];
+                }
+            });
+        });
+    };
     nAryTree.prototype.getTree = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var myRoot, myTree, groups, connectors, connectorsWithNames, _i, connectorsWithNames_1, connector;
+            var myRoot, myTree, groups, users, connectors, connectorsWithNames, _i, connectorsWithNames_1, connector;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -306,8 +334,11 @@ var nAryTree = /** @class */ (function () {
                         return [4 /*yield*/, groupsDB.getData()];
                     case 1:
                         groups = _a.sent();
-                        return [4 /*yield*/, groupsToUsersDB.getData()];
+                        return [4 /*yield*/, usersDB.getData()];
                     case 2:
+                        users = _a.sent();
+                        return [4 /*yield*/, groupsToUsersDB.getData()];
+                    case 3:
                         connectors = _a.sent();
                         connectorsWithNames = connectors.map(function (connector) {
                             if (connector.type === "group") {
@@ -318,10 +349,15 @@ var nAryTree = /** @class */ (function () {
                                     }
                                 }
                             }
-                            else { //fixme fetch users names
-                                return connector;
+                            else {
+                                for (var _a = 0, users_2 = users; _a < users_2.length; _a++) {
+                                    var user = users_2[_a];
+                                    if (user.id === connector.childId) {
+                                        return { type: connector.type, childId: connector.childId, parentId: connector.parentId, name: user.name, age: user.age };
+                                    }
+                                }
                             }
-                            // return "";
+                            return connector;
                         });
                         for (_i = 0, connectorsWithNames_1 = connectorsWithNames; _i < connectorsWithNames_1.length; _i++) {
                             connector = connectorsWithNames_1[_i];
@@ -331,7 +367,7 @@ var nAryTree = /** @class */ (function () {
                             else if (!myTree[connector.parentId]) {
                                 if (connector.type == "user") {
                                     // myTree[connector.parentId] = [new Group(connector.childId,"bbb",[],connector.parentId)]
-                                    myTree[connector.parentId] = [new User_1.User(connector.childId, "user1", 23, "")];
+                                    myTree[connector.parentId] = [new User_1.User(connector.childId, connector.name, connector.age, "")];
                                 }
                                 else {
                                     myTree[connector.parentId] = [new Group_1.Group(connector.childId, connector.name, [], connector.parentId)];
@@ -339,7 +375,7 @@ var nAryTree = /** @class */ (function () {
                             }
                             else {
                                 if (connector.type == "user") {
-                                    myTree[connector.parentId].push(new User_1.User(connector.childId, "user1", 23, ""));
+                                    myTree[connector.parentId].push(new User_1.User(connector.childId, connector.name, connector.age, ""));
                                     //fixme
                                 }
                                 else {
@@ -369,6 +405,24 @@ var nAryTree = /** @class */ (function () {
                 this.generateTree(child, tmpTree);
             }
         }
+    };
+    nAryTree.prototype.addMessage = function (groupId, content, toUser, date) {
+        return __awaiter(this, void 0, void 0, function () {
+            var user, newMessage, messageAdded;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, usersDB.getData([{ field: "name", value: toUser }])];
+                    case 1:
+                        user = _a.sent();
+                        if (user.length > 0) {
+                            newMessage = { writerId: user[0].id, type: "group", content: content, date: date, to: groupId };
+                            messageAdded = messagesDB.addData(newMessage);
+                            return [2 /*return*/, messageAdded];
+                        }
+                        return [2 /*return*/, {}];
+                }
+            });
+        });
     };
     ////////////////////////////////////////////////////////////////////////////////////////////////
     nAryTree.prototype.allGroupsOfUser = function (userName, arr, currentGroup) {
@@ -416,19 +470,6 @@ var nAryTree = /** @class */ (function () {
         }
         return allGroups;
     };
-    // public showGroupPath(group:Group){
-    //     var path = group.getGroupName();
-    //     // while(group.getParent()){
-    //     //     path = group.getParent().getGroupName() + ">" + path;
-    //     //     group = group.getParent();
-    //     // }
-    //     let parent = group.getParent();
-    //     while(parent){
-    //         path = parent.getGroupName() + ">" + path;
-    //         parent = parent.getParent();
-    //     }
-    //     return path;
-    // }
     nAryTree.prototype.returnGroupsAndUsers = function () {
         var myGroup = this.root;
         var myLevel = 0;

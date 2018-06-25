@@ -31,20 +31,14 @@ export async function deleteUser (req:Request,res:Response) {
     // return users;
 }
 
+export async function addMessageToUser (req:Request,res:Response) {
+    const message = await usersService.addMessageToUser(req.params.userName,req.body.content,req.body.toUser);
+    res.json(message);
+    // return users;
+}
 
-
-// class UsersController{
-//     constructor(){
-//
-//     }
-//
-//
-//
-//     getUsers = async (req:any,res:any)=>{
-//         // let users = await usersService.getUsers();
-//         let users = await usersDB.getUsers();
-//         res.json(users);
-//     }
-// }
-//
-/// export default UsersController;
+export async function getUserMessages (req:Request,res:Response) {
+    const messages = await usersService.getUserMessages(req.params.userName,req.params.chattingWith);
+    res.json(messages);
+    // return users;
+}

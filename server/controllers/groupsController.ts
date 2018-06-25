@@ -43,6 +43,16 @@ export async function getTree (req: Request, res: Response) {
     res.json(tree);
 }
 
+export async function getGroupMessages (req: Request, res: Response) {
+    const messages = await groupsService.getMessages(req.params.groupId);
+    res.json(messages);
+}
+
+export async function addMessageToGroup (req: Request, res: Response) {
+    const newMessage = await groupsService.addMessage(req.params.groupId,req.body.content,req.body.toUser,new Date());
+    res.json(newMessage);
+}
+
 
 
 

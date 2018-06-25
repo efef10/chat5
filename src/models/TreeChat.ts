@@ -7,6 +7,11 @@ import group from '../pic/group.png';
 //     path:string
 // }
 
+interface myGroupSpan extends HTMLSpanElement{
+    groupId:string
+}
+
+
 function TreeChat(element:HTMLElement) {
     // e:React.KeyboardEvent<HTMLDivElement>
     function arrowsKeyboard(e:any):void{
@@ -30,8 +35,8 @@ function TreeChat(element:HTMLElement) {
                     if(!!span){
                         span.focus();
                         if (span.classList.contains("group")) {
-                            // let target = span as myGroupSpan;
-                            // appService.selectGroup(target.path)
+                            let target = span as myGroupSpan;
+                            appService.selectGroup(target.groupId)
                             // this.props.groupSelected(target.path);//
                         }
                         else {
@@ -107,8 +112,9 @@ function TreeChat(element:HTMLElement) {
             }
             target.focus();
             if (target.classList.contains("group")) {
-                // let path = (target as myGroupSpan).path;
-                // appService.selectGroup(path)
+
+                let groupId = (target as myGroupSpan).groupId;
+                appService.selectGroup(groupId)
             }
             else {
                 appService.userSelected(target.innerText)
@@ -139,6 +145,7 @@ function TreeChat(element:HTMLElement) {
                 ul.appendChild(li);
                 if (item.type === "group") {
                     // (span as myGroupSpan).path = (item as Group).showGroupPath(); fixme maybe
+                    (span as myGroupSpan).groupId = item.id ;
                     span.innerHTML = (item.name);
                     span.classList.add("group");
                     let img = document.createElement("img");

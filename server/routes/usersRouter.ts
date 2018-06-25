@@ -4,8 +4,11 @@ import * as controllers from '../controllers'
 const usersRouter = express.Router();
 
 usersRouter.get ('/',controllers.getUsers);
+usersRouter.get ('/:userName/messages/:chattingWith',controllers.getUserMessages);
 
 usersRouter.post('/',controllers.addUser);
+usersRouter.post('/:userName/messages',controllers.addMessageToUser);
+
 
 usersRouter.put('/:userId',controllers.editUser);
 

@@ -27,6 +27,16 @@ class UsersService{
         return user;
     }
 
+    addMessageToUser = async(userId:string,content:string,toUser:string)=>{
+        const message = await users.addMessage(userId,{content,date:new Date(),toUser});
+        return message;
+    }
+
+    getUserMessages = async(userName:string,chattingWith:string)=>{
+        const messages = await users.getUserMessages(userName,chattingWith);
+        return messages;
+    }
+
 }
 
 export default UsersService;

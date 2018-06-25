@@ -14,8 +14,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
         while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
+            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [0, t.value];
             switch (op[0]) {
                 case 0: case 1: t = op; break;
                 case 4: _.label++; return { value: op[1], done: false };
@@ -38,6 +38,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var db_1 = require("../lib/db");
 var uniqid = require("uniqid");
 var usersDB = new db_1.DB("users");
+var messagesDB = new db_1.DB("messages");
 var Users = /** @class */ (function () {
     function Users(users) {
         this.users = users || [];
@@ -132,6 +133,61 @@ var Users = /** @class */ (function () {
                             return [2 /*return*/, []];
                         }
                         return [2 /*return*/];
+                }
+            });
+        });
+    };
+    Users.prototype.addMessage = function (userName, message) {
+        return __awaiter(this, void 0, void 0, function () {
+            var users, writerId, toId, _i, users_1, user, newMessage, myMessage;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, usersDB.getData()];
+                    case 1:
+                        users = _a.sent();
+                        for (_i = 0, users_1 = users; _i < users_1.length; _i++) {
+                            user = users_1[_i];
+                            if (user.name === userName) {
+                                writerId = user.id;
+                            }
+                            if (user.name === message.toUser) {
+                                toId = user.id;
+                            }
+                        }
+                        newMessage = { writerId: writerId, type: "user", to: toId, content: message.content, date: message.date };
+                        return [4 /*yield*/, messagesDB.addData(newMessage)];
+                    case 2:
+                        myMessage = _a.sent();
+                        return [2 /*return*/, myMessage];
+                }
+            });
+        });
+    };
+    Users.prototype.getUserMessages = function (userName, chattingWith) {
+        return __awaiter(this, void 0, void 0, function () {
+            var users, writerId, toId, _i, users_2, user, messages;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, usersDB.getData()];
+                    case 1:
+                        users = _a.sent();
+                        for (_i = 0, users_2 = users; _i < users_2.length; _i++) {
+                            user = users_2[_i];
+                            if (user.name === userName) {
+                                writerId = user.id;
+                            }
+                            if (user.name === chattingWith) {
+                                toId = user.id;
+                            }
+                        }
+                        if (!(writerId && toId)) return [3 /*break*/, 3];
+                        return [4 /*yield*/, messagesDB.getData([{ field: "to", value: toId },
+                                { field: "writerId", value: writerId },
+                                { field: "type", value: "user" }])];
+                    case 2:
+                        messages = _a.sent();
+                        return [2 /*return*/, messages];
+                    case 3: return [2 /*return*/, []];
                 }
             });
         });

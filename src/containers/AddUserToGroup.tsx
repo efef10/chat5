@@ -69,8 +69,8 @@ class AddUserToGroup extends React.Component<{},IAddUserToGroupState>{
 
     public render(){
         // const list = this.generateUsers();
-        const group = appService.getSelectedGroup();
-        const groupName = group?group.getGroupName():"";
+        // const group = appService.getSelectedGroup();
+        const groupName = "not implement"//group?group.getGroupName():"";
         return(
             <div className="userToGroup">
                 <h2>{`Choose users to add to group ${groupName}:`}</h2>

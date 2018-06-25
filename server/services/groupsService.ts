@@ -51,6 +51,16 @@ class GroupsService{
         const myTree = await this.chat[0].getGroups().getTree();
         return myTree;
     }
+
+    getMessages=async(groupId:string)=>{
+        const messages = await this.chat[0].getGroups().getMessages(groupId);
+        return messages;
+    }
+
+    addMessage=async(groupId:string,content:string,toUser:string,date:Date)=>{
+        const newMessage = await this.chat[0].getGroups().addMessage(groupId,content,toUser,date);
+        return newMessage;
+    }
 }
 
 export default GroupsService;

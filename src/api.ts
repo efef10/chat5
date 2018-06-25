@@ -1,3 +1,5 @@
+// import {appStore} from "./models/AppStore";
+
 export class Api{
     static baseURL:string = "http://localhost:4000";
 
@@ -48,8 +50,23 @@ export class Api{
         return this.get('/groups/tree');
     }
 
+    static getGroupMessages(groupId:string){
+        return this.get(`/groups/${groupId}/messages`);
+    }
 
-    static get(url:string){
+    static getUserMessages(userName:string,chattingWith:string){
+        return this.get(`/users/${userName}/messages/${chattingWith}`);
+    }
+
+    static addMessageToGroup(groupId:string,content:string,toUser:string){
+        return this.post(`/groups/${groupId}/messages`,{content,toUser})
+    }
+
+    static addMessageToUser(userName:string,content:string,toUser:string){
+        return this.post(`/users/${userName}/messages`,{content,toUser})
+    }
+
+    static get(url:string){debugger
         return fetch(Api.baseURL + url,{
             method:"GET"
         })

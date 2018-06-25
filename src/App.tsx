@@ -2,7 +2,6 @@ import * as React from 'react';
 import {appService} from "../src/models/AppStore";
 
 import Popup from './components/PopUp';
-// import TreeComponent from './components/TreeComponent';
 import AddUserToGroup from './containers/AddUserToGroup';
 import './App.css';
 import {Link,Redirect,Route,Switch} from 'react-router-dom';
@@ -15,8 +14,8 @@ import Edit from "./components/Edit";
 import CreateGroup from "./components/CreateGroup";
 import EditGroup from "./components/EditGroup";
 import {Group} from './models/Group';
-// import DisplayList from "./components/DisplayList";
-// import Management from "./containers/Management";
+import * as io from 'socket.io-client';
+import {IMessage} from './models/Group'
 
 interface IAppState{
     showPopup:boolean,
@@ -24,12 +23,12 @@ interface IAppState{
     users:object[],
     children:object[],
     tree:Group[],
+    messages:IMessage[],
 
 }
 
 class App extends React.Component<{},IAppState> {
     private myDropdown:any;
-    // private children:any[]
 
     constructor(props:any){
         super(props);
@@ -40,9 +39,10 @@ class App extends React.Component<{},IAppState> {
             users:[],
             tree:[],
             children:[],
+            messages:[],
         };
 
-        appService.subscribe((data:{groups:object[],users:object[],tree:Group[]})=>{
+        appService.subscribe((data:{groups:object[],users:object[],tree:Group[],messages:IMessage[]})=>{
             if(data.users!==this.state.users){
                 this.setState({
                     users:data.users
@@ -58,14 +58,20 @@ class App extends React.Component<{},IAppState> {
                     tree: data.tree
                 });
             }
+            if(data.messages!==this.state.messages) {
+                this.setState({
+                    messages: data.messages
+                });
+            }
         })
     }
 
     componentDidMount(){
+        let socket = io.connect("http://localhost:4000")
+        socket.emit('user logged in');
         appService.getUsers();
         appService.getGroups();
         appService.getTree();
-        // appService.getTree();
         window.onclick = (event:any)=> {
             if (event.target && !event.target.matches('.dropbtn')) {
                 var dropdowns = this.myDropdown;
@@ -101,7 +107,7 @@ class App extends React.Component<{},IAppState> {
     public generateLink(){
         let group = appService.getSelectedGroup();
         if(!!group){
-            return `/groups/${group.getGroupName()}/add`
+            return `/groups/${group}/add`
         }
         return "";
 
@@ -147,6 +153,8 @@ class App extends React.Component<{},IAppState> {
 
 
   public render() {
+
+
     return (
       <div className="App">
           <div className='header'>
@@ -160,7 +168,7 @@ class App extends React.Component<{},IAppState> {
               </div>
 
               <Link to="/"><div className='navElement'>Home</div></Link>
-              {appService.getSelectedGroup()!==null?<Link to={this.generateLink()}><FontAwesome onClick={this.togglePopup} name='user-plus' /></Link>:null}
+              {appService.getSelectedGroup()!==""?<Link to={this.generateLink()}><FontAwesome onClick={this.togglePopup} name='user-plus' /></Link>:null}
               <Link to={appService.getLoggedUser()===""?"/login":"/"}><div id='logIn' onClick={appService.getLoggedUser()===""?this.togglePopup:this.logOut}>{appService.getLoggedUser()===""?"Log In":"Log Out"}</div></Link>
 
           </div>
@@ -173,7 +181,7 @@ class App extends React.Component<{},IAppState> {
               <Route exact={true} path='/users/:id' render={this.edit}/>
               <Route exact={true} path='/groups/new' render={this.renderCreateGroup}/>
               <Route exact={true} path='/groups/:id' render={this.editGroup}/>
-              <MainData groups={this.state.tree}>
+              <MainData groups={this.state.tree} messages={this.state.messages}>
                   <div>
                       <Route exact={true} path='/login' render={this.renderLogIn}/>
                   </div>

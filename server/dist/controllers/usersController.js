@@ -99,19 +99,34 @@ function deleteUser(req, res) {
     });
 }
 exports.deleteUser = deleteUser;
-// class UsersController{
-//     constructor(){
-//
-//     }
-//
-//
-//
-//     getUsers = async (req:any,res:any)=>{
-//         // let users = await usersService.getUsers();
-//         let users = await usersDB.getUsers();
-//         res.json(users);
-//     }
-// }
-//
-/// export default UsersController;
+function addMessageToUser(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var message;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, usersService.addMessageToUser(req.params.userName, req.body.content, req.body.toUser)];
+                case 1:
+                    message = _a.sent();
+                    res.json(message);
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.addMessageToUser = addMessageToUser;
+function getUserMessages(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var messages;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, usersService.getUserMessages(req.params.userName, req.params.chattingWith)];
+                case 1:
+                    messages = _a.sent();
+                    res.json(messages);
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.getUserMessages = getUserMessages;
 //# sourceMappingURL=usersController.js.map

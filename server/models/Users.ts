@@ -2,6 +2,7 @@ import {DB} from '../lib/db';
 import * as uniqid from 'uniqid';
 
 const usersDB = new DB("users");
+const messagesDB = new DB("messages");
 
 export {};
 
@@ -109,7 +110,47 @@ export class Users implements IUsers{
         }
 
     }
+
+    public async addMessage(userName:string,message:{content:string,toUser:string,date:Date}){
+        const users = await usersDB.getData()
+        let writerId;
+        let toId;
+        for(let user of users){
+            if(user.name === userName){
+                writerId=user.id;
+            }
+            if(user.name === message.toUser){
+                toId = user.id;
+            }
+        }
+
+        let newMessage = {writerId,type:"user",to:toId,content:message.content,date:message.date}
+        let myMessage =  await messagesDB.addData(newMessage)
+        return myMessage;
+    }
+
+    public async getUserMessages(userName:string,chattingWith:string){
+        const users = await usersDB.getData()
+        let writerId;
+        let toId;
+        for(let user of users){
+            if(user.name === userName){
+                writerId=user.id;
+            }
+            if(user.name === chattingWith){
+                toId = user.id;
+            }
+        }
+        if(writerId && toId){
+            let messages = await messagesDB.getData([{field:"to",value:toId},
+                                                             {field:"writerId",value:writerId},
+                                                             {field:"type",value:"user"}])
+            return messages;
+        }
+        return [];
+    }
 }
+
 
 
 // module.exports.Users = Users;

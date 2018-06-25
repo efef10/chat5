@@ -3,7 +3,7 @@ import {Group} from './Group';
 // import {Chat} from './Chat';
 
 import {Api} from '../../src/api'
-// import {IMessage} from './Group';
+import {IMessage} from './Group';
 
 
 // interface observer{
@@ -14,7 +14,7 @@ import {Api} from '../../src/api'
 
 export interface AppState {
     // chat : Chat
-    selectedGroup:Group|null;
+    selectedGroup:string;
     loggedUser:string;
     chattingWithUser:string;
     componentTreeShouldUpdate:boolean;
@@ -25,6 +25,7 @@ export class AppService {
     users: object[];
     groups: object[];
     tree:Group[];
+    messages:IMessage[];
     // selectedGroup:Group|null;
     // loggedUser:string;
     // chattingWithUser:string;
@@ -35,6 +36,7 @@ export class AppService {
         this.listeners = [];
         this.users=[];
         this.groups=[];
+        this.messages=[];
         appStore.loggedUser = "";
         appStore.chattingWithUser="";
     }
@@ -178,6 +180,38 @@ export class AppService {
         appStore.componentTreeShouldUpdate = false;
     }
 
+    addMessage(content:string){
+        if(!content.replace(/^\s+|\s+$/g,"")){
+            return;
+        }
+        if(!!appStore.selectedGroup) {
+            return Api.addMessageToGroup(appStore.selectedGroup,content,appStore.loggedUser)
+                .then((newMessage)=>{
+                    Api.getGroupMessages(appStore.selectedGroup)
+                        .then((messages)=>{
+                            this.messages = messages;
+                            this.onStoreChanged();
+                        })
+                    return newMessage;
+                })
+        }
+
+        else if(appStore.chattingWithUser!=="") {
+            return Api.addMessageToUser(appStore.loggedUser,content,appStore.chattingWithUser)
+                .then((newMessage)=>{
+                    Api.getUserMessages(appStore.loggedUser,appStore.chattingWithUser)
+                        .then((messages)=>{
+                            this.messages = messages;
+                            this.onStoreChanged();
+                        })
+                    return newMessage;
+                })
+        }
+        // this.onStoreChanged();
+    return
+
+    }
+
     // addMessage(content:string){
     //     if(!content.replace(/^\s+|\s+$/g,"")){
     //         return;
@@ -214,25 +248,44 @@ export class AppService {
     //     this.onStoreChanged();
     // }
 
-    // selectGroup(path:string){
-    //     appStore.chattingWithUser = "";
-    //     let group = appStore.chat.getGroupByPath(path);
-    //     if(appStore.loggedUser!=="" && !!group && group.userInGroup(appStore.loggedUser) ){
-    //         appStore.selectedGroup= group;
-    //     }
-    //     else{
-    //         appStore.selectedGroup=null;
-    //     }
-    //     this.onStoreChanged();
-    // }
+    selectGroup(groupId:string){
+        if(appStore.loggedUser!==""){
+            appStore.chattingWithUser = "";
+            appStore.selectedGroup= groupId;
+            return Api.getGroupMessages(groupId)
+                .then((messages)=>{
+                    this.messages = messages;
+                    this.onStoreChanged();
+                })
+        }
+        else{
+            return;
+        }
+        // else{
+        //     appStore.selectedGroup="";
+        //     this.messages = [];
+        //     this.onStoreChanged();
+        //     return;
+        // }
+
+    }
 
     userSelected(userName:string){
         if(appStore.loggedUser===""){
             return;
         }
         appStore.chattingWithUser = userName;
-        appStore.selectedGroup = null;
-        this.onStoreChanged();
+        appStore.selectedGroup= "";
+        return Api.getUserMessages(appStore.loggedUser,userName)
+            .then((messages)=>{
+                this.messages = messages;
+                this.onStoreChanged();
+            })
+    }
+
+    getMessages(){
+        debugger
+        return this.messages;
     }
 
     // getMessages(){
@@ -285,18 +338,18 @@ export class AppService {
         this.onStoreChanged();
     }
 
-    // auth(userName:string,password:string){
-    //     let user =  appStore.chat.returnUserByName(userName);
-    //     if(!!user){
-    //         return user.getPassword()===password;
-    //     }
-    //     return false;
-    //
-    // }
+    auth(userName:string,password:string){
+        // let user =  appStore.chat.returnUserByName(userName);
+        // if(!!user){
+        //     return user.getPassword()===password;
+        // }
+        // return false;
+    return true;
+    }
 
     logOut(){
         appStore.loggedUser="";
-        appStore.selectedGroup=null;
+        appStore.selectedGroup="";
         appStore.chattingWithUser="";
         this.onStoreChanged();
     }
@@ -311,6 +364,7 @@ export class AppService {
                 users: this.users,
                 groups:this.groups,
                 tree:this.tree,
+                messages:this.messages,
             });
         }
     }
@@ -318,7 +372,7 @@ export class AppService {
 
 export const appStore: AppState = {
     // chat : new Chat(),
-    selectedGroup:null,
+    selectedGroup:"",
     loggedUser:"",
     chattingWithUser:"",
     componentTreeShouldUpdate:false,

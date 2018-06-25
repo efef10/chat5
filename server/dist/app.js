@@ -8,7 +8,8 @@ app.use(cors());
 app.use(express.json());
 app.use('/users', routes.usersRouter);
 app.use('/groups', routes.groupsRouter);
-app.listen(4000, function () {
-    console.log("listening on port 4000");
-});
+// app.listen(4000,()=>{
+//     console.log("listening on port 4000");
+// })
+exports.default = app;
 //# sourceMappingURL=app.js.map

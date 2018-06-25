@@ -4,7 +4,7 @@ import History from './History';
 import {IMessage} from '../models/Group';
 
 interface IDataFlowProps{
-    messages:IMessage[];
+    messages:IMessage[],
 }
 
 

@@ -1,19 +1,15 @@
-import * as http from 'http';
-import app from './app';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var http = require("http");
+var app_1 = require("./app");
 // import * as socketIo from 'socket.io';
 // var http = require('http').Server(app);
-const server = http.createServer(app);
-
-import socketApp from './io'
-
-socketApp(server)
-
-
-
+var server = http.createServer(app_1.default);
+var io_1 = require("./io");
+io_1.default(server);
 // const io = socketIo(server);
 // const socket = io();
 // var io = require('socket.io')(http);
-
 // io.on('connection',(socket)=>{
 //     console.log("someone opened the browser...")
 //
@@ -27,7 +23,7 @@ socketApp(server)
 //     });
 //
 // })
-
-server.listen(4000,()=>{
+server.listen(4000, function () {
     console.log("listening on port 4000");
 });
+//# sourceMappingURL=index.js.map

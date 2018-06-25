@@ -14,8 +14,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
         while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
+            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [0, t.value];
             switch (op[0]) {
                 case 0: case 1: t = op; break;
                 case 4: _.label++; return { value: op[1], done: false };
@@ -73,11 +73,31 @@ var DB = /** @class */ (function () {
             resolve(_this.myData[_this.fileName]);
         });
     };
-    DB.prototype.getData = function () {
+    DB.prototype.getData = function (conditions) {
         var _this = this;
         return new Promise(function (resolve, reject) {
             _this.readFromJson().then(function (myData) {
-                resolve(myData[_this.fileName].slice());
+                if (!!conditions) {
+                    var myObjects = [];
+                    for (var _i = 0, _a = _this.myData[_this.fileName]; _i < _a.length; _i++) {
+                        var obj = _a[_i];
+                        var objInConditions = true;
+                        for (var _b = 0, conditions_1 = conditions; _b < conditions_1.length; _b++) {
+                            var condition = conditions_1[_b];
+                            if (obj[condition["field"]] !== condition["value"]) {
+                                objInConditions = false;
+                                break;
+                            }
+                        }
+                        if (objInConditions) {
+                            myObjects.push(obj);
+                        }
+                    }
+                    resolve(myObjects.slice());
+                }
+                else {
+                    resolve(myData[_this.fileName].slice());
+                }
             });
         });
     };
@@ -107,8 +127,8 @@ var DB = /** @class */ (function () {
             for (var _i = 0, _a = _this.myData[_this.fileName]; _i < _a.length; _i++) {
                 var obj = _a[_i];
                 var objInConditions = true;
-                for (var _b = 0, conditions_1 = conditions; _b < conditions_1.length; _b++) {
-                    var condition = conditions_1[_b];
+                for (var _b = 0, conditions_2 = conditions; _b < conditions_2.length; _b++) {
+                    var condition = conditions_2[_b];
                     if (obj[condition["field"]] !== condition["value"]) {
                         objInConditions = false;
                         break;
@@ -139,8 +159,8 @@ var DB = /** @class */ (function () {
             for (var _i = 0, _a = _this.myData[_this.fileName]; _i < _a.length; _i++) {
                 var obj = _a[_i];
                 var objInConditions = true;
-                for (var _b = 0, conditions_2 = conditions; _b < conditions_2.length; _b++) {
-                    var condition = conditions_2[_b];
+                for (var _b = 0, conditions_3 = conditions; _b < conditions_3.length; _b++) {
+                    var condition = conditions_3[_b];
                     if (obj[condition["field"]] !== condition["value"]) {
                         objInConditions = false;
                         break;

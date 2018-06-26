@@ -35,22 +35,21 @@ class DisplayChildren extends React.Component<IDisplayChildrenProps,IDisplayChil
 
 
     componentWillReceiveProps(props:IDisplayChildrenProps){
-        this.setState({list:[...props.list]})
+        console.log(">>>>>>>>>>>>>PROPS", props.list);
+        // if(this.state.list !== props.list){
+            this.setState({list:props.list})
+        // }
     }
 
-    deleteData=(e:any, item:any)=>{
-        let children = this.state.list.filter((child)=>{
-            return child.id!==item.id;
-        })
-        debugger;
-        this.setState({list:children})
-        this.props.deleteData(item.id,item.type)
+    deleteData=async (e:any, item:any)=>{
+        await this.props.deleteData(item.id,item.type);
+        // const children = await this.calcChildren(e,item)
+        // this.setState({list: children})
+
     }
 
     calcChildren=(e:any,item:any)=>{
-        appService.allUsersOfGroup(item.id).then((children)=>{
-            this.setState({currentChildren:children});
-        })
+        return appService.allChildrenOfGroup(item.id);
     }
 
     submit = ()=>{
@@ -59,7 +58,6 @@ class DisplayChildren extends React.Component<IDisplayChildrenProps,IDisplayChil
     }
 
     addUser = ()=>{
-        // const selectWrapper = e.target.elements.selectedGroup;
         const selected = this.selectUser.options[this.selectUser.selectedIndex];
         this.props.addUserToGroup(selected.value);
     }

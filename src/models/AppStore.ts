@@ -22,8 +22,8 @@ export interface AppState {
 
 export class AppService {
     listeners: Function[];
-    users: object[];
-    groups: object[];
+    users: any[];
+    groups: any[];
     tree:Group[];
     messages:IMessage[];
     // selectedGroup:Group|null;
@@ -132,7 +132,7 @@ export class AppService {
             })
     }
 
-    async allUsersOfGroup(groupId:string){
+    async allChildrenOfGroup(groupId:string){
         let connectors = await Api.getConnectors(groupId);
         if(!connectors || !connectors[0]){
             return [];
@@ -212,61 +212,36 @@ export class AppService {
 
     }
 
-    // addMessage(content:string){
-    //     if(!content.replace(/^\s+|\s+$/g,"")){
-    //         return;
-    //     }
-    //     if(!!appStore.selectedGroup) {
-    //         appStore.selectedGroup.addMessage(
-    //             {content:  content,
-    //                 date:     new Date(),
-    //                 userName: appStore.loggedUser});
-    //         // auto reply:
-    //         appStore.selectedGroup.addMessage(
-    //             {content:  "what do you say???",
-    //                 date:     new Date(),
-    //                 userName: "bambi"});
-    //     }
-    //     else if(appStore.chattingWithUser!=="") {
-    //         let user = appStore.chat.returnUserByName(appStore.loggedUser);
-    //         let chattingWith =  appStore.chat.returnUserByName(appStore.chattingWithUser);
-    //         if(!!user && !!chattingWith) {
-    //             user.addMessage(
-    //                 {content: content,
-    //                     date: new Date(),
-    //                     userName: appStore.loggedUser,
-    //                     chattingWithUser:appStore.chattingWithUser});
-    //
-    //             // auto reply:
-    //             chattingWith.addMessage(
-    //                 {content: appStore.loggedUser === appStore.chattingWithUser ? "I'm your virtual Psychologist. \n can I help you?":`hi ${appStore.loggedUser} !!! we haven't talk for a long time`,
-    //                     date: new Date(),
-    //                     userName: appStore.chattingWithUser,
-    //                     chattingWithUser:appStore.loggedUser})
-    //         }
-    //     }
-    //     this.onStoreChanged();
-    // }
 
-    selectGroup(groupId:string){
+    async groupWithUsers(groupId:string){
+        let children = await this.allChildrenOfGroup(groupId);
+        if(children.length > 0 && children[0].type === "user"){
+            return true;
+        }
+        return false;
+    }
+
+    async selectGroup(groupId:string){
         if(appStore.loggedUser!==""){
             appStore.chattingWithUser = "";
-            appStore.selectedGroup= groupId;
+            debugger
+            if(await this.groupWithUsers(groupId)){
+                appStore.selectedGroup= groupId;
+            }
+            else{
+                appStore.selectedGroup= "";
+            }
             return Api.getGroupMessages(groupId)
                 .then((messages)=>{
                     this.messages = messages;
                     this.onStoreChanged();
                 })
+
+
         }
         else{
             return;
         }
-        // else{
-        //     appStore.selectedGroup="";
-        //     this.messages = [];
-        //     this.onStoreChanged();
-        //     return;
-        // }
 
     }
 
@@ -287,29 +262,6 @@ export class AppService {
         debugger
         return this.messages;
     }
-
-    // getMessages(){
-    //     if(!!appStore.selectedGroup){
-    //         return appStore.selectedGroup.getMessages();
-    //     }
-    //     else if(appStore.chattingWithUser!=="" && appStore.loggedUser!==""){
-    //         let user = appStore.chat.returnUserByName(appStore.loggedUser);
-    //         let chattingWith =  appStore.chat.returnUserByName(appStore.chattingWithUser);
-    //         if(!!user && !!chattingWith){
-    //             let allMessages =  user.getUserMessages(appStore.chattingWithUser).concat
-    //             (appStore.loggedUser !==appStore.chattingWithUser ?chattingWith.getUserMessages(appStore.loggedUser):[]);
-    //             return allMessages.sort((message1:any,message2:any)=>{
-    //                 return message1.date-message2.date;
-    //             })
-    //         }
-    //         else{
-    //             return []
-    //         }
-    //     }
-    //     else{
-    //         return [];
-    //     }
-    // }
 
     getLoggedUser(){
         return appStore.loggedUser;
@@ -351,6 +303,7 @@ export class AppService {
         appStore.loggedUser="";
         appStore.selectedGroup="";
         appStore.chattingWithUser="";
+        this.messages = [];
         this.onStoreChanged();
     }
 

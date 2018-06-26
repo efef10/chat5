@@ -4,7 +4,7 @@ import {appService} from "../src/models/AppStore";
 import Popup from './components/PopUp';
 import AddUserToGroup from './containers/AddUserToGroup';
 import './App.css';
-import {Link,Redirect,Route,Switch} from 'react-router-dom';
+import {Link,Route,Switch} from 'react-router-dom';
 const FontAwesome = require('react-fontawesome');
 import '../node_modules/font-awesome/css/font-awesome.min.css';
 import MainData from "./containers/MainData";
@@ -14,8 +14,9 @@ import Edit from "./components/Edit";
 import CreateGroup from "./components/CreateGroup";
 import EditGroup from "./components/EditGroup";
 import {Group} from './models/Group';
-import * as io from 'socket.io-client';
+// import * as io from 'socket.io-client';
 import {IMessage} from './models/Group'
+// const socket = io.connect("http://localhost:4000");
 
 interface IAppState{
     showPopup:boolean,
@@ -24,11 +25,13 @@ interface IAppState{
     children:object[],
     tree:Group[],
     messages:IMessage[],
+    connectors:object[],
 
 }
 
 class App extends React.Component<{},IAppState> {
     private myDropdown:any;
+    // private socket:any;
 
     constructor(props:any){
         super(props);
@@ -40,9 +43,14 @@ class App extends React.Component<{},IAppState> {
             tree:[],
             children:[],
             messages:[],
+            connectors:[],
         };
 
-        appService.subscribe((data:{groups:object[],users:object[],tree:Group[],messages:IMessage[]})=>{
+        appService.subscribe((data:{groups:object[],
+                                           users:object[],
+                                           tree:Group[],
+                                           messages:IMessage[],
+                                           connectors:object[]})=>{
             if(data.users!==this.state.users){
                 this.setState({
                     users:data.users
@@ -63,15 +71,23 @@ class App extends React.Component<{},IAppState> {
                     messages: data.messages
                 });
             }
+            if(data.connectors!==this.state.connectors) {
+                this.setState({
+                    connectors: data.connectors
+                });
+            }
+
         })
     }
 
     componentDidMount(){
-        let socket = io.connect("http://localhost:4000")
-        socket.emit('user logged in');
         appService.getUsers();
         appService.getGroups();
         appService.getTree();
+        let tree = this.state.tree;
+        debugger
+        console.log(tree);
+        debugger
         window.onclick = (event:any)=> {
             if (event.target && !event.target.matches('.dropbtn')) {
                 var dropdowns = this.myDropdown;
@@ -81,6 +97,15 @@ class App extends React.Component<{},IAppState> {
             }
         }
         }
+
+    public messageAdded(){
+        // socket.emit("message",msg);
+        //
+        // socket.on('message', (msg:any)=>{
+        //     this.setState({message:this.state.messages.concat([message])})
+        // });
+
+    }
 
     myFunction=()=> {
         this.myDropdown.classList.toggle("show");
@@ -98,8 +123,8 @@ class App extends React.Component<{},IAppState> {
         appService.logOut();
     }
 
-    public renderLogIn=(props:any)=>
-        (appService.getLoggedUser()===""?<Popup {...props} />:<Redirect to={{pathname:"/"}}/>)
+    public renderLogIn=(props:any)=>(<Popup {...props}/>);
+        // (appService.getLoggedUser()===""?<Popup {...props} />:<Redirect to={{pathname:"/"}}/>)
 
     public renderSignUp = (props:any)=>
         (<div/>)
@@ -152,11 +177,19 @@ class App extends React.Component<{},IAppState> {
     }
 
 
+    public renderMain =()=>(
+        <MainData groups={this.state.tree} messages={this.state.messages}>
+            <div>
+                <Route exact={true} path='/login' render={this.renderLogIn}/>
+            </div>
+        </MainData>)
+
   public render() {
 
 
     return (
       <div className="App">
+          <Route path='/login' render={this.renderLogIn}/>
           <div className='header'>
 
               <div className="dropdown navElement">
@@ -172,7 +205,6 @@ class App extends React.Component<{},IAppState> {
               <Link to={appService.getLoggedUser()===""?"/login":"/"}><div id='logIn' onClick={appService.getLoggedUser()===""?this.togglePopup:this.logOut}>{appService.getLoggedUser()===""?"Log In":"Log Out"}</div></Link>
 
           </div>
-          <Route path='/login' render={this.renderLogIn}/>
           <Switch>
               <Route exact={true} path='/groups/:group/add' component={AddUserToGroup}/>
               <Route exact={true} path='/users' render={this.renderDisplayUsers}/>
@@ -181,6 +213,7 @@ class App extends React.Component<{},IAppState> {
               <Route exact={true} path='/users/:id' render={this.edit}/>
               <Route exact={true} path='/groups/new' render={this.renderCreateGroup}/>
               <Route exact={true} path='/groups/:id' render={this.editGroup}/>
+              <Route exact={true} path='/' render={this.renderMain}/>
               <MainData groups={this.state.tree} messages={this.state.messages}>
                   <div>
                       <Route exact={true} path='/login' render={this.renderLogIn}/>

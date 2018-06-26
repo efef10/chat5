@@ -2,22 +2,28 @@ import * as React from 'react';
 import {appService} from "../models/AppStore";
 import './Send.css';
 
-class Send extends React.Component{
+interface ISendProps{
+    addMessage(msg:string):void
+}
+
+
+
+class Send extends React.Component<ISendProps,{}>{
     private input:any
-    constructor(props:any){
+    constructor(props:ISendProps){
         super(props);
     }
 
     public addMessage =(e:any)=>{
-        appService.addMessage(e.target.previousSibling.value);
+        this.props.addMessage(e.target.previousSibling.value);
         this.input.value="";
     }
 
     public render(){
         return(
             <div className='send'>
-                <input ref={elem=>this.input = elem} id="message" type="text" placeholder='enter message' disabled={appService.getSelectedGroup()||appService.getChattedWithUser()!==""?false:true}/>
-                <button onClick={this.addMessage} disabled={appService.getSelectedGroup()||appService.getChattedWithUser()!==""?false:true}>{'>'}</button>
+                <input ref={elem=>this.input = elem} id="message" type="text" placeholder='enter message' disabled={appService.getSelectedGroup()!==""||appService.getChattedWithUser()!==""?false:true}/>
+                <button onClick={this.addMessage} disabled={appService.getSelectedGroup()!==""||appService.getChattedWithUser()!==""?false:true}>{'>'}</button>
             </div>
         );
     }

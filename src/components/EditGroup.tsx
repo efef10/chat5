@@ -32,22 +32,28 @@ class EditGroup extends React.Component<IEditProps,IEditState>{
 
 
     componentWillReceiveProps(props:IEditProps){
-        this.setState({list:[...props.list]});
+        if(this.state.list!==props.list){
+            // this.setState({list:[...props.list]});
+            this.setState({
+                groupId:this.props.location.state.object.id,
+                groupName:this.props.location.state.object.name},async ()=>{
+                let children = await appService.allChildrenOfGroup(this.props.location.state.object.id);
+                debugger
+                this.setState({list:children});
+            });
+        }
     }
 
-
-    deleteData=(childId:string,childType:string)=>{
-        appService.deleteConnector(this.state.groupId,{childId:childId,type:childType});
-        let tmpList = [...this.state.list];
-        let newList = tmpList.filter((item)=>{
-            item.id !== childId
-        })
-        this.setState({list:newList});
+    deleteData=async(childId:string,childType:string)=>{
+        await appService.deleteConnector(this.state.groupId,{childId:childId,type:childType});
+        let children = await appService.allChildrenOfGroup(this.state.groupId);
+        this.setState({list:children})
     }
 
-    addGroup=(groupName:string)=>{
-        debugger
-        appService.addGroup(groupName,this.state.groupId);
+    addGroup=async(groupName:string)=>{
+        await appService.addGroup(groupName,this.state.groupId);
+        let children = await appService.allChildrenOfGroup(this.state.groupId);
+        this.setState({list:children})
     }
 
     submit=()=>{
@@ -56,13 +62,16 @@ class EditGroup extends React.Component<IEditProps,IEditState>{
         // appService.editUser({type:"user",id:id,name:username, age:this.state.age,password:this.state.password})
     }
 
-    addUserToGroup=(userId:string)=>{
-        appService.addUserToGroup(userId,this.state.groupId);
+     addUserToGroup=async(userId:string)=>{
+        await appService.addUserToGroup(userId,this.state.groupId);
+        let children = await appService.allChildrenOfGroup(this.state.groupId);
+        this.setState({list:children})
     }
 
     render(){
         return (
             <>
+                {/*<p>Edit Group: {this.props.location.state.object.id} {this.props.location.state.object.name}</p>*/}
                 <p>Edit Group: {this.props.location.state.object.id} {this.props.location.state.object.name}</p>
 
                 <div>

@@ -85,6 +85,7 @@ export class nAryTree implements INAryTree{
             await groupsToUsersDB.addData({type:"group",parentId:toGroupID,childId:newGroupOthers.id});
             //=== update the new parent of the users:  ===
             await groupsToUsersDB.editData([{"field":"parentId","value":toGroupID},{"field":"type","value":"user"}],[{"field":"parentId","value":newGroupOthers.id}])
+            await messagesDB.editData([{field:"to",value:toGroupID},{field:"type",value:"group"}],[{field:"to",value:newGroupOthers.id}])
             //============================================
         }
         return newGroup;

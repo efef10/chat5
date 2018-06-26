@@ -5,12 +5,14 @@ import './Popup.css';
 
 // this.props.match.params.id
 
-// interface IPopupProps{
-//     type:string
-// }
+interface IPopupProps{
+    history:any
+}
 
-class Popup extends React.Component{
-
+class Popup extends React.Component<IPopupProps, {}>{
+    constructor(props:IPopupProps){
+        super(props);
+    }
     private userName:any
     private password:any
     private hint:any
@@ -18,6 +20,7 @@ class Popup extends React.Component{
     public logUser=()=>{
         if(appService.auth(this.userName.value,this.password.value)){
             appService.logUser(this.userName.value);
+            this.props.history.push('/')
         }
         else{
             alert("user name or password is not correct");

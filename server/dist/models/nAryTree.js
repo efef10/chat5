@@ -135,7 +135,7 @@ var nAryTree = /** @class */ (function () {
                         return [4 /*yield*/, groupsToUsersDB.addData(connector)];
                     case 5:
                         _a.sent();
-                        if (!(myConnectors.length > 0 && myConnectors[0].type === "user")) return [3 /*break*/, 9];
+                        if (!(myConnectors.length > 0 && myConnectors[0].type === "user")) return [3 /*break*/, 10];
                         newGroupOthers = { type: "group", name: "others", id: uniqid() };
                         return [4 /*yield*/, groupsDB.addData(newGroupOthers)];
                     case 6:
@@ -144,14 +144,17 @@ var nAryTree = /** @class */ (function () {
                     case 7:
                         _a.sent();
                         //=== update the new parent of the users:  ===
-                        return [4 /*yield*/, groupsToUsersDB.editData([{ "field": "parentId", "value": toGroupID }, { "field": "type", "value": "user" }], [{ "field": "parentId", "value": newGroupOthers.id }])
-                            //============================================
-                        ];
+                        return [4 /*yield*/, groupsToUsersDB.editData([{ "field": "parentId", "value": toGroupID }, { "field": "type", "value": "user" }], [{ "field": "parentId", "value": newGroupOthers.id }])];
                     case 8:
                         //=== update the new parent of the users:  ===
                         _a.sent();
-                        _a.label = 9;
-                    case 9: return [2 /*return*/, newGroup];
+                        return [4 /*yield*/, messagesDB.editData([{ field: "to", value: toGroupID }, { field: "type", value: "group" }], [{ field: "to", value: newGroupOthers.id }])
+                            //============================================
+                        ];
+                    case 9:
+                        _a.sent();
+                        _a.label = 10;
+                    case 10: return [2 /*return*/, newGroup];
                 }
             });
         });

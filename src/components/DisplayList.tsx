@@ -41,7 +41,7 @@ class DisplayList extends React.Component<IDisplayListProps,IDisplayListState>{
     }
 
     calcChildren=(e:any,item:any)=>{
-        appService.allUsersOfGroup(item.id).then((children)=>{
+        appService.allChildrenOfGroup(item.id).then((children)=>{
             this.setState({currentChildren:children});
         })
     }

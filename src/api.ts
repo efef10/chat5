@@ -66,7 +66,7 @@ export class Api{
         return this.post(`/users/${userName}/messages`,{content,toUser})
     }
 
-    static get(url:string){debugger
+    static get(url:string){
         return fetch(Api.baseURL + url,{
             method:"GET"
         })

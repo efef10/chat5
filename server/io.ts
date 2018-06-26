@@ -9,13 +9,12 @@ const socketApp = (httpServer: Server) => {
 
     function makeSocket(socket: socketIo.Socket) {
         console.log("hi");
-        socket.on('message', onMessage)
+        socket.on('message', (msg)=>{
+            io.emit('message',msg, { for: 'everyone' })
+        })
     }
 
-    async function onMessage(message:any) {
-        console.log(message)
-        io.emit('message')
-    }
+
 }
 
 export default socketApp

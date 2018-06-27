@@ -7,6 +7,7 @@ usersRouter.get('/', controllers.getUsers);
 usersRouter.get('/:userName/messages/:chattingWith', controllers.getUserMessages);
 usersRouter.post('/', controllers.addUser);
 usersRouter.post('/:userName/messages', controllers.addMessageToUser);
+usersRouter.post('/:userName/login', controllers.authUser);
 usersRouter.put('/:userId', controllers.editUser);
 usersRouter.delete('/:userId', controllers.deleteUser);
 // usersRouter.post('/',async (req,res)=>{

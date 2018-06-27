@@ -17,7 +17,7 @@ class CreateGroup extends React.Component<ICreateGroupProps,{}>{
         const selectWrapper = e.target.elements.selectedGroup;
         const selected = selectWrapper.options[selectWrapper.selectedIndex];
         // console.log(selected.value);
-        appService.addGroup(groupName,selected.value);
+        appService.addGroup(groupName,(selected?selected.value:"-1"));
     }
 
     render(){

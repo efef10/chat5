@@ -4,12 +4,13 @@ import {editUser}   from './usersController'
 import {deleteUser} from './usersController'
 import {addMessageToUser} from './usersController'
 import {getUserMessages} from './usersController'
-
+import {authUser} from './usersController'
 
 import {getGroups} from './groupsController'
 import {editGroup} from './groupsController'
 import {deleteGroup} from './groupsController'
 import {addGroup} from './groupsController'
+
 
 import {getConnectors} from './groupsController'
 import {deleteConnector} from './groupsController'
@@ -31,6 +32,7 @@ export {getUsers,
         editUser,
         deleteUser,
         getTree,
+        authUser,
         addMessageToGroup,
         addMessageToUser,
         getGroupMessages}

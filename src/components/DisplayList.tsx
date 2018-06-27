@@ -18,13 +18,15 @@ interface IDisplayListProps{
 interface IDisplayListState{
     currentChildren:any[],
     list:any[],
+    usersToAdd:any[],
 }
 
 class DisplayList extends React.Component<IDisplayListProps,IDisplayListState>{
     constructor(props:any){
         super(props);
         this.state={currentChildren:[],
-                    list:this.props.list}
+                    list:this.props.list,
+                    usersToAdd:[]}
     }
 
 
@@ -43,7 +45,37 @@ class DisplayList extends React.Component<IDisplayListProps,IDisplayListState>{
     calcChildren=(e:any,item:any)=>{
         appService.allChildrenOfGroup(item.id).then((children)=>{
             this.setState({currentChildren:children});
+            // appService.getUsers().then((users)=>{
+            //     let remainingUsers = users.filter((user:any)=>{
+            //         let inConditions = false;
+            //         for(let child of children){
+            //             if(child.type === "user" && child.id !== user.id){
+            //                 inConditions = true;
+            //             }
+            //         }
+            //         return inConditions;
+            //     })
+            //     this.setState({usersToAdd:remainingUsers})
+            // })
         })
+
+
+        // let children = await appService.allChildrenOfGroup(this.state.groupId);
+        // let remainingUsers = this.props.users.filter((user)=>{
+        //     let inConditions = false;
+        //     for(let child of children){
+        //         if(child.type === "user" && child.id !== user.id){
+        //             inConditions = true;
+        //         }
+        //     }
+        //     return inConditions;
+        // })
+        // this.setState({usersToAdd:remainingUsers})
+
+
+
+
+
     }
 
     render(){

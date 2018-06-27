@@ -3,6 +3,7 @@ import * as uniqid from 'uniqid';
 
 const usersDB = new DB("users");
 const messagesDB = new DB("messages");
+const connectorsDB = new DB("connectors")
 
 export {};
 
@@ -35,6 +36,11 @@ export class Users implements IUsers{
             await usersDB.initiate();
         }
         // let newId = data.length;
+        for (let user of data){
+            if(user.name === body.name){
+                return false
+            }
+        }
         body.id= uniqid();
         let user = await usersDB.addData(body);
         return user;
@@ -50,9 +56,9 @@ export class Users implements IUsers{
         return usersDB.editData([{"field":"id","value":userId}],updates);
     }
 
-    public removeUser(userId:string){
-        return usersDB.deleteData([{"field":"id","value":userId}]);
-
+    public async removeUser(userId:string){
+        await connectorsDB.deleteData([{field:"type",value:"user"},{field:"childId",value:userId}])
+        return await usersDB.deleteData([{"field":"id","value":userId}]);
         // var user = this.returnUserByName(userName)
         // if(user!==null){
         //     var index = this.users.indexOf(user);
@@ -112,7 +118,7 @@ export class Users implements IUsers{
     }
 
     public async addMessage(userName:string,message:{content:string,toUser:string,date:Date}){
-        const users = await usersDB.getData()
+        const users = await usersDB.getData();
         let writerId;
         let toId;
         for(let user of users){
@@ -124,13 +130,24 @@ export class Users implements IUsers{
             }
         }
 
-        let newMessage = {writerId,type:"user",to:toId,content:message.content,date:message.date}
-        let myMessage =  await messagesDB.addData(newMessage)
+
+        let newMessage = {userName,writerId,type:"user",to:toId,content:message.content,date:message.date};
+        let myMessage =  await messagesDB.addData(newMessage);
         return myMessage;
     }
 
+    public async authUser(userName:string,password:string){
+        const users = await usersDB.getData();
+        for(let user of users){
+            if(user.password === password){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public async getUserMessages(userName:string,chattingWith:string){
-        const users = await usersDB.getData()
+        const users = await usersDB.getData();
         let writerId;
         let toId;
         for(let user of users){
@@ -142,10 +159,20 @@ export class Users implements IUsers{
             }
         }
         if(writerId && toId){
-            let messages = await messagesDB.getData([{field:"to",value:toId},
-                                                             {field:"writerId",value:writerId},
-                                                             {field:"type",value:"user"}])
-            return messages;
+            // let messages = await messagesDB.getData([{field:"to",value:toId},
+            //                                                  {field:"writerId",value:writerId},
+            //                                                  {field:"type",value:"user"}]);
+
+            let messages = await messagesDB.getData();
+            let myMessages = [];
+            for(let message of messages){
+                if(message.type === "user"){
+                    if((message.writerId === writerId && message.to) === toId || (message.to === writerId && message.writerId)){
+                        myMessages.push(message);
+                    }
+                }
+            }
+            return myMessages;
         }
         return [];
     }

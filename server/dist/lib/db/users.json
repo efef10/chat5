@@ -1,22 +1,6 @@
 {
   "users": [
     {
-      "name": "efrat",
-      "age": 25,
-      "password": "efrat",
-      "type": "user",
-      "message": [],
-      "id": "7"
-    },
-    {
-      "name": "eli",
-      "age": 1,
-      "password": "eli",
-      "type": "user",
-      "message": [],
-      "id": "8"
-    },
-    {
       "name": "bambi",
       "age": 3,
       "password": "bambi",
@@ -25,13 +9,22 @@
       "id": "9"
     },
     {
-      "name": "bentzi",
-      "password": "",
+      "name": "efrat1993",
+      "password": "efrat1993",
+      "age": 25,
+      "imageUrl": "",
+      "type": "user",
+      "message": [],
+      "id": "a19ap3a2ojivzsszv"
+    },
+    {
+      "name": "efrat",
+      "password": "efrat",
       "age": 0,
       "imageUrl": "",
       "type": "user",
       "message": [],
-      "id": "a19ap3fawjit37qsf"
+      "id": "a19ap3he4jiwsis0u"
     }
   ]
 }

@@ -37,7 +37,12 @@ class Edit extends React.Component<IEditProps,IEditState>{
     submit=()=>{
         // const username = this.props.location.state.object.name;
         const id = this.props.location.state.object.id;
-       appService.editUser(id,[{"field":"age","value":Number(this.state.age)},{"field":"password","value":this.state.password}])
+        if(this.state.password!==""){
+            appService.editUser(id,[{"field":"age","value":Number(this.state.age)},{"field":"password","value":this.state.password}])
+        }
+        else{
+            appService.editUser(id,[{"field":"age","value":Number(this.state.age)}])
+        }
     }
 
     render(){
@@ -50,10 +55,10 @@ class Edit extends React.Component<IEditProps,IEditState>{
                     <input type="text" value={this.state.age} onChange={this.ageChanged} placeholder="Age"/>
                 </div>
 
-                <div>
-                    <label>Profile Image:</label>
-                    <input type="text" value={this.state.profileImg} onChange={this.profileImgChanged} placeholder="Profile Image"/>
-                </div>
+                {/*<div>*/}
+                    {/*<label>Profile Image:</label>*/}
+                    {/*<input type="text" value={this.state.profileImg} onChange={this.profileImgChanged} placeholder="Profile Image"/>*/}
+                {/*</div>*/}
 
                <div>
                    <label>Password:</label>

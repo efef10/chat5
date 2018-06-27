@@ -37,6 +37,11 @@ class UsersService{
         return messages;
     }
 
+    authUser = async(userName:string,password:string)=>{
+        const authSuccess = await users.authUser(userName,password);
+        return authSuccess;
+    }
+
 }
 
 export default UsersService;

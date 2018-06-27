@@ -39,13 +39,14 @@ var db_1 = require("../lib/db");
 var uniqid = require("uniqid");
 var usersDB = new db_1.DB("users");
 var messagesDB = new db_1.DB("messages");
+var connectorsDB = new db_1.DB("connectors");
 var Users = /** @class */ (function () {
     function Users(users) {
         this.users = users || [];
     }
     Users.prototype.addUser = function (body) {
         return __awaiter(this, void 0, void 0, function () {
-            var data, user;
+            var data, _i, data_1, user_1, user;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -61,6 +62,12 @@ var Users = /** @class */ (function () {
                         _a.label = 3;
                     case 3:
                         // let newId = data.length;
+                        for (_i = 0, data_1 = data; _i < data_1.length; _i++) {
+                            user_1 = data_1[_i];
+                            if (user_1.name === body.name) {
+                                return [2 /*return*/, false];
+                            }
+                        }
                         body.id = uniqid();
                         return [4 /*yield*/, usersDB.addData(body)];
                     case 4:
@@ -78,13 +85,17 @@ var Users = /** @class */ (function () {
         return usersDB.editData([{ "field": "id", "value": userId }], updates);
     };
     Users.prototype.removeUser = function (userId) {
-        return usersDB.deleteData([{ "field": "id", "value": userId }]);
-        // var user = this.returnUserByName(userName)
-        // if(user!==null){
-        //     var index = this.users.indexOf(user);
-        //     this.users.splice(index,1);
-        // }
-        // user.removeUserEvent.fire(userName);
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, connectorsDB.deleteData([{ field: "type", value: "user" }, { field: "childId", value: userId }])];
+                    case 1:
+                        _a.sent();
+                        return [4 /*yield*/, usersDB.deleteData([{ "field": "id", "value": userId }])];
+                    case 2: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
     };
     //////////////////////////////////////////////////////////////////////
     Users.prototype.setUserAge = function (userName, newAge) {
@@ -154,7 +165,7 @@ var Users = /** @class */ (function () {
                                 toId = user.id;
                             }
                         }
-                        newMessage = { writerId: writerId, type: "user", to: toId, content: message.content, date: message.date };
+                        newMessage = { userName: userName, writerId: writerId, type: "user", to: toId, content: message.content, date: message.date };
                         return [4 /*yield*/, messagesDB.addData(newMessage)];
                     case 2:
                         myMessage = _a.sent();
@@ -163,9 +174,9 @@ var Users = /** @class */ (function () {
             });
         });
     };
-    Users.prototype.getUserMessages = function (userName, chattingWith) {
+    Users.prototype.authUser = function (userName, password) {
         return __awaiter(this, void 0, void 0, function () {
-            var users, writerId, toId, _i, users_2, user, messages;
+            var users, _i, users_2, user;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, usersDB.getData()];
@@ -173,6 +184,25 @@ var Users = /** @class */ (function () {
                         users = _a.sent();
                         for (_i = 0, users_2 = users; _i < users_2.length; _i++) {
                             user = users_2[_i];
+                            if (user.password === password) {
+                                return [2 /*return*/, true];
+                            }
+                        }
+                        return [2 /*return*/, false];
+                }
+            });
+        });
+    };
+    Users.prototype.getUserMessages = function (userName, chattingWith) {
+        return __awaiter(this, void 0, void 0, function () {
+            var users, writerId, toId, _i, users_3, user, messages, myMessages, _a, messages_1, message;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, usersDB.getData()];
+                    case 1:
+                        users = _b.sent();
+                        for (_i = 0, users_3 = users; _i < users_3.length; _i++) {
+                            user = users_3[_i];
                             if (user.name === userName) {
                                 writerId = user.id;
                             }
@@ -181,12 +211,19 @@ var Users = /** @class */ (function () {
                             }
                         }
                         if (!(writerId && toId)) return [3 /*break*/, 3];
-                        return [4 /*yield*/, messagesDB.getData([{ field: "to", value: toId },
-                                { field: "writerId", value: writerId },
-                                { field: "type", value: "user" }])];
+                        return [4 /*yield*/, messagesDB.getData()];
                     case 2:
-                        messages = _a.sent();
-                        return [2 /*return*/, messages];
+                        messages = _b.sent();
+                        myMessages = [];
+                        for (_a = 0, messages_1 = messages; _a < messages_1.length; _a++) {
+                            message = messages_1[_a];
+                            if (message.type === "user") {
+                                if ((message.writerId === writerId && message.to) === toId || (message.to === writerId && message.writerId)) {
+                                    myMessages.push(message);
+                                }
+                            }
+                        }
+                        return [2 /*return*/, myMessages];
                     case 3: return [2 /*return*/, []];
                 }
             });

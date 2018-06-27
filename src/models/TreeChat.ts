@@ -7,8 +7,8 @@ import group from '../pic/group.png';
 //     path:string
 // }
 
-interface myGroupSpan extends HTMLSpanElement{
-    groupId:string
+interface myItemSpan extends HTMLSpanElement{
+    itemId:string
 }
 
 
@@ -34,13 +34,15 @@ function TreeChat(element:HTMLElement) {
                     let span = elem.querySelector("span");
                     if(!!span){
                         span.focus();
+                        let item = span as myItemSpan;
                         if (span.classList.contains("group")) {
-                            let target = span as myGroupSpan;
-                            appService.selectGroup(target.groupId)
+
+                            appService.selectGroup(item.itemId,span.innerText)
                             // this.props.groupSelected(target.path);//
                         }
                         else {
-                            appService.userSelected(span.innerText)
+                            appService.userSelected(span.innerText,item.itemId)
+                            // appService.userSelected(span.innerText)
                         }
                     }
                 }
@@ -99,6 +101,7 @@ function TreeChat(element:HTMLElement) {
     }
 
     function load(items:Group[]){
+        debugger
         element.addEventListener("keydown",arrowsKeyboard);
         element.addEventListener("dblclick",showHideGroups);
         element.addEventListener("click",(e:any)=> {
@@ -111,13 +114,13 @@ function TreeChat(element:HTMLElement) {
                 target = target.parentElement;
             }
             target.focus();
+            let itemId = (target as myItemSpan).itemId;
             if (target.classList.contains("group")) {
-
-                let groupId = (target as myGroupSpan).groupId;
-                appService.selectGroup(groupId)
+                appService.selectGroup(itemId,target.innerText)
             }
             else {
-                appService.userSelected(target.innerText)
+                appService.userSelected(target.innerText,itemId)
+                // appService.userSelected(target.innerText)
             }
         });
         clear();
@@ -133,19 +136,18 @@ function TreeChat(element:HTMLElement) {
             items.forEach((item)=> {
                 const li = document.createElement("li");
                 const span = document.createElement("span");
+                (span as myItemSpan).itemId = item.id ;
                 if(item.type !== "group"){
                     span.innerHTML = (item.name);
-                    let img = document.createElement("img");
+                    // let img = document.createElement("img");
                     // img.setAttribute("src",require("../pic/"+(item as User).getProfileImg()));//fixme
-                    span.insertBefore(img, span.childNodes[0]);
+                    // span.insertBefore(img, span.childNodes[0]);
                 }
                 span.setAttribute("tabindex",level.toString());
                 span.style.paddingLeft = (30*level).toString()+"px";
                 li.appendChild(span);
                 ul.appendChild(li);
                 if (item.type === "group") {
-                    // (span as myGroupSpan).path = (item as Group).showGroupPath(); fixme maybe
-                    (span as myGroupSpan).groupId = item.id ;
                     span.innerHTML = (item.name);
                     span.classList.add("group");
                     let img = document.createElement("img");

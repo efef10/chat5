@@ -22,8 +22,8 @@ class GroupsService{
         return myGroup;
     }
 
-    editGroup=async(groupId:string,body:{name:string,type:string})=>{
-        const myGroup = await this.chat[0].getGroups().addGroup(body.name,groupId);
+    editGroup=async(groupId:string,updates:{field:string,value:any}[])=>{
+        const myGroup = await this.chat[0].getGroups().editGroup(groupId,updates);
         return myGroup;
     }
 
@@ -48,7 +48,14 @@ class GroupsService{
     }
 
     getTree=async()=>{
-        const myTree = await this.chat[0].getGroups().getTree();
+        let groups = this.chat[0].getGroups();
+        let myTree;
+        if(!!groups){
+            myTree = await groups.getTree()
+        }
+        else{
+            myTree = [];
+        }
         return myTree;
     }
 
@@ -57,8 +64,8 @@ class GroupsService{
         return messages;
     }
 
-    addMessage=async(groupId:string,content:string,toUser:string,date:Date)=>{
-        const newMessage = await this.chat[0].getGroups().addMessage(groupId,content,toUser,date);
+    addMessage=async(groupId:string,content:string,fromUser:string,date:Date)=>{
+        const newMessage = await this.chat[0].getGroups().addMessage(groupId,content,fromUser,date);
         return newMessage;
     }
 }

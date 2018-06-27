@@ -129,4 +129,20 @@ function getUserMessages(req, res) {
     });
 }
 exports.getUserMessages = getUserMessages;
+function authUser(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var authSucess, objRes;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, usersService.authUser(req.params.userName, req.body.password)];
+                case 1:
+                    authSucess = _a.sent();
+                    objRes = { authSucess: authSucess };
+                    res.json(objRes);
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.authUser = authUser;
 //# sourceMappingURL=usersController.js.map

@@ -25,15 +25,14 @@ class History extends React.Component<IHistoryProps,IHistoryState>{
 
     }
 
-    public time(message:IMessage){
-        // let date = Date.parse(message.date)
-        // debugger
+    public time(message:any){
+        // return `   ${(message.date as string).substr(11,5)}`;
         // let hours = message.date.getHours().toString();
         // let minutes = message.date.getMinutes().toString();
         // hours = hours.length === 1 ? '0'+hours : hours;
         // minutes = minutes.length === 1 ? '0'+minutes : minutes;
         // return `  ${hours}:${minutes}`;
-        return `   13:30`
+        return "";
     }
 
     public generateHistory(){
@@ -60,7 +59,7 @@ class History extends React.Component<IHistoryProps,IHistoryState>{
         let chattedWithUser = appService.getChattedWithUser();
         let loggedUser = appService.getLoggedUser();
         if(!!group){
-            return chatting+" in group: "+"fixme"//group.getGroupName();
+            return chatting+" in group: "+appService.groupName;
         }
         else if (loggedUser===chattedWithUser && loggedUser!==""){
             return "talking to yourself? your'e better not to be seen... :-)";

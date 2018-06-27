@@ -42,3 +42,10 @@ export async function getUserMessages (req:Request,res:Response) {
     res.json(messages);
     // return users;
 }
+
+export async function authUser (req:Request,res:Response) {
+    const authSucess = await usersService.authUser(req.params.userName,req.body.password);
+    let objRes = {authSucess};
+    res.json(objRes);
+    // return users;
+}

@@ -67,11 +67,11 @@ var GroupsService = /** @class */ (function () {
                 }
             });
         }); };
-        this.editGroup = function (groupId, body) { return __awaiter(_this, void 0, void 0, function () {
+        this.editGroup = function (groupId, updates) { return __awaiter(_this, void 0, void 0, function () {
             var myGroup;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.chat[0].getGroups().addGroup(body.name, groupId)];
+                    case 0: return [4 /*yield*/, this.chat[0].getGroups().editGroup(groupId, updates)];
                     case 1:
                         myGroup = _a.sent();
                         return [2 /*return*/, myGroup];
@@ -123,13 +123,20 @@ var GroupsService = /** @class */ (function () {
             });
         }); };
         this.getTree = function () { return __awaiter(_this, void 0, void 0, function () {
-            var myTree;
+            var groups, myTree;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.chat[0].getGroups().getTree()];
+                    case 0:
+                        groups = this.chat[0].getGroups();
+                        if (!!!groups) return [3 /*break*/, 2];
+                        return [4 /*yield*/, groups.getTree()];
                     case 1:
                         myTree = _a.sent();
-                        return [2 /*return*/, myTree];
+                        return [3 /*break*/, 3];
+                    case 2:
+                        myTree = [];
+                        _a.label = 3;
+                    case 3: return [2 /*return*/, myTree];
                 }
             });
         }); };
@@ -144,11 +151,11 @@ var GroupsService = /** @class */ (function () {
                 }
             });
         }); };
-        this.addMessage = function (groupId, content, toUser, date) { return __awaiter(_this, void 0, void 0, function () {
+        this.addMessage = function (groupId, content, fromUser, date) { return __awaiter(_this, void 0, void 0, function () {
             var newMessage;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.chat[0].getGroups().addMessage(groupId, content, toUser, date)];
+                    case 0: return [4 /*yield*/, this.chat[0].getGroups().addMessage(groupId, content, fromUser, date)];
                     case 1:
                         newMessage = _a.sent();
                         return [2 /*return*/, newMessage];

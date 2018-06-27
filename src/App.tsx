@@ -80,10 +80,12 @@ class App extends React.Component<{},IAppState> {
         })
     }
 
-    componentDidMount(){
+    async componentDidMount(){
         appService.getUsers();
-        appService.getGroups();
-        appService.getTree();
+        let groups = await appService.getGroups();
+        if(!!groups){
+            appService.getTree();
+        }
         let tree = this.state.tree;
         debugger
         console.log(tree);

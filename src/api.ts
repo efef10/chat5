@@ -58,12 +58,20 @@ export class Api{
         return this.get(`/users/${userName}/messages/${chattingWith}`);
     }
 
-    static addMessageToGroup(groupId:string,content:string,toUser:string){
-        return this.post(`/groups/${groupId}/messages`,{content,toUser})
+    static addMessageToGroup(groupId:string,content:string,fromUser:string){
+        return this.post(`/groups/${groupId}/messages`,{content,fromUser})
     }
 
     static addMessageToUser(userName:string,content:string,toUser:string){
         return this.post(`/users/${userName}/messages`,{content,toUser})
+    }
+
+    static authUser(userName:string,password:string){
+        return this.post(`/users/${userName}/login`,{password})
+    }
+
+    static editGroup(groupId:string,updates:{field:string,value:any}[]){
+        return this.put(`/groups/${groupId}`,{updates})
     }
 
     static get(url:string){

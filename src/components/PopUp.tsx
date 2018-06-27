@@ -17,8 +17,8 @@ class Popup extends React.Component<IPopupProps, {}>{
     private password:any
     private hint:any
 
-    public logUser=()=>{
-        if(appService.auth(this.userName.value,this.password.value)){
+    public logUser=async()=>{
+        if(await appService.auth(this.userName.value,this.password.value)){
             appService.logUser(this.userName.value);
             this.props.history.push('/')
         }

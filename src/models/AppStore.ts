@@ -4,8 +4,8 @@ import {Group} from './Group';
 
 import {Api} from '../../src/api'
 import {IMessage} from './Group';
-
-
+import * as io from 'socket.io-client';
+export const socket = io.connect("http://localhost:4000");
 // interface observer{
 //     type:string,
 //     listeners: Function[];
@@ -14,6 +14,7 @@ import {IMessage} from './Group';
 
 export interface AppState {
     // chat : Chat
+    chatId:string;
     selectedGroup:string;
     loggedUser:string;
     chattingWithUser:string;
@@ -26,6 +27,7 @@ export class AppService {
     groups: any[];
     tree:Group[];
     messages:IMessage[];
+    groupName:string
     // selectedGroup:Group|null;
     // loggedUser:string;
     // chattingWithUser:string;
@@ -37,6 +39,8 @@ export class AppService {
         this.users=[];
         this.groups=[];
         this.messages=[];
+        this.groupName="";
+        this.tree=[];
         appStore.loggedUser = "";
         appStore.chattingWithUser="";
     }
@@ -60,7 +64,6 @@ export class AppService {
     }
 
     editUser(userId:string,updates:{field:string,value:any}[]){
-        debugger
         return Api.editUser(userId,updates)
             .then((user)=>{
                 Api.getUsers()
@@ -104,11 +107,15 @@ export class AppService {
                         this.users=users;
                         this.onStoreChanged();
                     });
+                if(!user){
+                    alert("username already exists");
+                }
                 return user;
             })
     }
 
     addGroup(groupName:string,toGroupID:string){
+        debugger
         return Api.addGroup(groupName,toGroupID)
             .then((group)=>{
                 Api.getGroups()
@@ -192,6 +199,7 @@ export class AppService {
                             this.messages = messages;
                             this.onStoreChanged();
                         })
+                    socket.emit("message",newMessage,appStore.chatId);
                     return newMessage;
                 })
         }
@@ -204,6 +212,7 @@ export class AppService {
                             this.messages = messages;
                             this.onStoreChanged();
                         })
+                    socket.emit("message",newMessage,appStore.chatId);
                     return newMessage;
                 })
         }
@@ -212,24 +221,40 @@ export class AppService {
 
     }
 
-
-    async groupWithUsers(groupId:string){
+    async groupWithUsers(groupId:string,userName:string){
         let children = await this.allChildrenOfGroup(groupId);
+        debugger
         if(children.length > 0 && children[0].type === "user"){
-            return true;
+            let inGroup = false;
+            for (let child of children){
+                if(child.name === userName){
+                    inGroup = true;
+                }
+            }
+            return inGroup;
         }
         return false;
     }
 
-    async selectGroup(groupId:string){
+    async selectGroup(groupId:string,groupName:string){
         if(appStore.loggedUser!==""){
             appStore.chattingWithUser = "";
-            debugger
-            if(await this.groupWithUsers(groupId)){
+            if(await this.groupWithUsers(groupId, appStore.loggedUser)){
+                if(appStore.chatId!==""){
+                    socket.emit("leave-group",appStore.chatId);
+                }
+                socket.emit("join-group",groupId);
+                appStore.chatId = groupId;
                 appStore.selectedGroup= groupId;
+                this.groupName=groupName;
             }
             else{
+                if(appStore.chatId!==""){
+                    socket.emit("leave-group",appStore.chatId);
+                }
                 appStore.selectedGroup= "";
+                appStore.chatId = "";
+                this.groupName="";
             }
             return Api.getGroupMessages(groupId)
                 .then((messages)=>{
@@ -245,12 +270,29 @@ export class AppService {
 
     }
 
-    userSelected(userName:string){
+    editGroup(groupId:string,updates:{field:string,value:any}[]){
+        return Api.editGroup(groupId,updates)
+            .then((group)=>{
+                Api.getGroups()
+                    .then((groups)=>{
+                        this.groups=groups;
+                        this.onStoreChanged();
+                    });
+                return group;
+            })
+    }
+
+    userSelected(userName:string,userId:string){
         if(appStore.loggedUser===""){
             return;
         }
         appStore.chattingWithUser = userName;
         appStore.selectedGroup= "";
+        if(appStore.chatId!==""){
+            socket.emit("leave-group",appStore.chatId);
+        }
+        appStore.chatId = (userName < appStore.loggedUser?userName+appStore.loggedUser:appStore.loggedUser+userName);
+        socket.emit("join-group",appStore.chatId);
         return Api.getUserMessages(appStore.loggedUser,userName)
             .then((messages)=>{
                 this.messages = messages;
@@ -276,6 +318,7 @@ export class AppService {
     }
 
     groupsToDisplay(){
+        debugger
         return this.tree;
         // let root = appStore.chat.getGroups().getRoot();
         // if(!!root){
@@ -290,13 +333,13 @@ export class AppService {
         this.onStoreChanged();
     }
 
-    auth(userName:string,password:string){
-        // let user =  appStore.chat.returnUserByName(userName);
-        // if(!!user){
-        //     return user.getPassword()===password;
-        // }
-        // return false;
-    return true;
+    async auth(userName:string,password:string){
+        let res = await Api.authUser(userName,password)
+        let auth = res.authSucess;
+
+        debugger
+        return auth;
+        // return true;
     }
 
     logOut(){
@@ -325,6 +368,7 @@ export class AppService {
 
 export const appStore: AppState = {
     // chat : new Chat(),
+    chatId:"",
     selectedGroup:"",
     loggedUser:"",
     chattingWithUser:"",

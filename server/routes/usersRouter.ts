@@ -8,7 +8,7 @@ usersRouter.get ('/:userName/messages/:chattingWith',controllers.getUserMessages
 
 usersRouter.post('/',controllers.addUser);
 usersRouter.post('/:userName/messages',controllers.addMessageToUser);
-
+usersRouter.post('/:userName/login',controllers.authUser);
 
 usersRouter.put('/:userId',controllers.editUser);
 

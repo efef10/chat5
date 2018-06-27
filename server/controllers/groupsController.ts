@@ -14,7 +14,7 @@ export async function addGroup (req: Request, res: Response) {
 }
 
 export async function editGroup (req: Request, res: Response) {
-    const group = await groupsService.editGroup(req.params.groupId,req.body);
+    const group = await groupsService.editGroup(req.params.groupId,req.body.updates);
     res.json(group);
 }
 
@@ -49,7 +49,7 @@ export async function getGroupMessages (req: Request, res: Response) {
 }
 
 export async function addMessageToGroup (req: Request, res: Response) {
-    const newMessage = await groupsService.addMessage(req.params.groupId,req.body.content,req.body.toUser,new Date());
+    const newMessage = await groupsService.addMessage(req.params.groupId,req.body.content,req.body.fromUser,new Date());
     res.json(newMessage);
 }
 

@@ -72,7 +72,7 @@ function editGroup(req, res) {
         var group;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, groupsService.editGroup(req.params.groupId, req.body)];
+                case 0: return [4 /*yield*/, groupsService.editGroup(req.params.groupId, req.body.updates)];
                 case 1:
                     group = _a.sent();
                     res.json(group);
@@ -177,7 +177,7 @@ function addMessageToGroup(req, res) {
         var newMessage;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, groupsService.addMessage(req.params.groupId, req.body.content, req.body.toUser, new Date())];
+                case 0: return [4 /*yield*/, groupsService.addMessage(req.params.groupId, req.body.content, req.body.fromUser, new Date())];
                 case 1:
                     newMessage = _a.sent();
                     res.json(newMessage);

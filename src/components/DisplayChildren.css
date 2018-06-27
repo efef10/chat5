@@ -1,3 +1,7 @@
+displayChildren{
+    margin-top:50px;
+}
+
 .displayChildren li{
     list-style-type: none;
     /*background-color: #25d366;*/
@@ -9,7 +13,7 @@
 }
 
 .displayChildren ul{
-    padding: 5px 20%;
+    padding: 5px 10%;
 }
 
 .displayChildren p{

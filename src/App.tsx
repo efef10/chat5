@@ -82,14 +82,9 @@ class App extends React.Component<{},IAppState> {
 
     async componentDidMount(){
         appService.getUsers();
-        let groups = await appService.getGroups();
-        if(!!groups){
-            appService.getTree();
-        }
-        let tree = this.state.tree;
+        await appService.getGroups();
         debugger
-        console.log(tree);
-        debugger
+        appService.getTree();
         window.onclick = (event:any)=> {
             if (event.target && !event.target.matches('.dropbtn')) {
                 var dropdowns = this.myDropdown;

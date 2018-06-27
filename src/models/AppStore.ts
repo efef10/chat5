@@ -159,9 +159,10 @@ export class AppService {
     getTree(){
         return Api.getTree()
             .then((tree)=>{
-                this.tree = [tree];
+                tree.length === 0?this.tree = []:this.tree = [tree];
                 this.onStoreChanged();
-                return [tree];
+                return this.tree;
+                // return [tree];
             })
     }
 
@@ -318,14 +319,7 @@ export class AppService {
     }
 
     groupsToDisplay(){
-        debugger
         return this.tree;
-        // let root = appStore.chat.getGroups().getRoot();
-        // if(!!root){
-        //     return [root];
-        // }
-        // else
-        //     return [];
     }
 
     logUser(userName:string){

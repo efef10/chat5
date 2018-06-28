@@ -6,6 +6,10 @@
     width:100%;
 }
 
+.editingChildren{
+    margin:0 20px;
+}
+
 .chooseChild{
     display:flex;
     flex-direction: row;

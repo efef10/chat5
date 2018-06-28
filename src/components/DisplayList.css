@@ -32,12 +32,23 @@
 
 }
 
-.wrapper button{
-    display:none;
-    margin-left:40px;
+.wrapper .fa{
+    color: #073d34;
+    float:right;
+    font-size:50px;
+    margin-left:15px;
 }
 
-.wrapper:hover button{
+.wrapper .fa-trash:hover{
+    color: #b30000;
+}
+
+.wrapper .fa{
+    display:none;
+    /*margin-left:40px;*/
+}
+
+.wrapper:hover .fa{
     display:inline-block;
 }
 

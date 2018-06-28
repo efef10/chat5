@@ -49,7 +49,8 @@ class Edit extends React.Component<IEditProps,IEditState>{
     render(){
         return (
             <div className="edit">
-                <p>Edit User: {this.props.location.state.object.name}</p>
+
+                <h1>Edit User: {this.props.location.state.object.name}</h1>
 
                 <div className="editItem">
                     <label>Age:</label>
@@ -63,7 +64,7 @@ class Edit extends React.Component<IEditProps,IEditState>{
 
                <div className="editItem">
                    <label>Password:</label>
-                   <input type="text" value={this.state.password} onChange={this.passwordChanged} placeholder="New Password"/>
+                   <input type="password" value={this.state.password} onChange={this.passwordChanged} placeholder="New Password"/>
                </div>
                 <div>
                     <input type="submit" onClick={this.submit} value="save"/>

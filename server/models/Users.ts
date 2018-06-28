@@ -159,10 +159,6 @@ export class Users implements IUsers{
             }
         }
         if(writerId && toId){
-            // let messages = await messagesDB.getData([{field:"to",value:toId},
-            //                                                  {field:"writerId",value:writerId},
-            //                                                  {field:"type",value:"user"}]);
-
             let messages = await messagesDB.getData();
             let myMessages = [];
             for(let message of messages){

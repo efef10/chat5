@@ -2,7 +2,7 @@ import * as React from 'react';
 // import {Link} from 'react-router-dom';
 const FontAwesome = require('react-fontawesome');
 import './DisplayChildren.css';
-import {appService} from "../models/AppStore";
+// import {appService} from "../models/AppStore";
 // import CreateUser from './CreateUser'
 // interface IItem{
 //     name:string,
@@ -55,9 +55,9 @@ class DisplayChildren extends React.Component<IDisplayChildrenProps,IDisplayChil
 
     }
 
-    calcChildren=(e:any,item:any)=>{
-        return appService.allChildrenOfGroup(item.id);
-    }
+    // calcChildren=(e:any,item:any)=>{
+    //     return appService.allChildrenOfGroup(item.id);
+    // }
 
     submit = ()=>{
         this.props.addGroup(this.groupName.value);

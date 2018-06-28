@@ -26,8 +26,12 @@
     "ts-loader": "^4.3.0",
     "uniqid": "^5.0.3"
   },
+
+
   "scripts": {
-    "start": "react-scripts-ts start",
+    "start-client": "react-scripts-ts start",
+    "start-server": "tsc -p \"server/tsconfig.json\" && node ./server/dist/index.js",
+    "start": "concurrently  \"npm run start-server\"  \"npm run start-client\" ",
     "build": "react-scripts-ts build",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject"

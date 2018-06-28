@@ -43,7 +43,7 @@ class DisplayList extends React.Component<IDisplayListProps,IDisplayListState>{
         this.props.deleteData(item.id,item.type)
     }
 
-    calcChildren=(e:any,item:any)=>{
+    calcChildren=(item:any)=>{
         appService.allChildrenOfGroup(item.id).then((children)=>{
             this.setState({currentChildren:children});
         })
@@ -64,10 +64,12 @@ class DisplayList extends React.Component<IDisplayListProps,IDisplayListState>{
                             <p>{item.id}</p>
                             {(this.props.type!=="children")?
                                 (<Link to={{pathname:`/${this.state.list[0].type === "user"?'users':'groups'}/${item.id}`,state:{object:item,children:this.state.currentChildren}}}>
-                                    <button className="listBtn" onMouseOver={(e)=>{this.calcChildren(e,item)}}>Edit ></button>
+                                    <FontAwesome name='edit' onMouseOver={()=>{this.calcChildren(item)}}/>
+                                    {/*<button className="listBtn" onMouseOver={(e)=>{this.calcChildren(e,item)}}>Edit ></button>*/}
                                 </Link>):
                                 <></>}
-                            <button className="listBtn" onClick={(e)=>{this.deleteData(e,item)}}>Delete</button>
+                            <FontAwesome name='trash' onClick={(e:any)=>{this.deleteData(e,item)}}/>
+                            {/*<button className="listBtn" onClick={(e)=>{this.deleteData(e,item)}}>Delete</button>*/}
                         </div>
                     </li>
             )

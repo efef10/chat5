@@ -36,8 +36,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var fs = require("fs");
+var path = require("path");
 // import {User} from '../models/User';
 // import {Group} from '../models/Group';
+var baseDir = path.join(__dirname.replace('dist' + path.sep, ''));
 var DB = /** @class */ (function () {
     function DB(fileName) {
         this.fileName = fileName;
@@ -48,7 +50,7 @@ var DB = /** @class */ (function () {
             var data;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, fs.readFileSync(__dirname + "/db/" + this.fileName + ".json")];
+                    case 0: return [4 /*yield*/, fs.readFileSync(baseDir + "/db/" + this.fileName + ".json")];
                     case 1:
                         data = _a.sent();
                         this.myData = JSON.parse(data.toString() || "{\"" + this.fileName + "\":[]}");
@@ -58,7 +60,7 @@ var DB = /** @class */ (function () {
         });
     };
     DB.prototype.writeToJson = function () {
-        fs.writeFileSync(__dirname + "/db/" + this.fileName + ".json", JSON.stringify(this.myData));
+        fs.writeFileSync(baseDir + "/db/" + this.fileName + ".json", JSON.stringify(this.myData));
     };
     DB.prototype.setMyData = function (data) {
         this.myData[this.fileName] = data;

@@ -1,28 +1,35 @@
-.edit{
+.createUser span{
+    color:red;
+}
+
+.createUser{
     margin:100px auto;
     border:5px solid #075e54;
     padding:30px;
     border-radius: 5px;
 }
 
-
-.edit h1{
+.createUser h1{
     text-align: center;
     margin-top:0;
 }
 
-.editItem{
+.userDetail{
     display:flex;
     flex-direction: row;
     margin-bottom:20px;
 }
 
-.editItem label{
+.userDetail input{
+    /*width:100%;*/
+}
+
+.userDetail label{
     width:100%;
     margin-right:5px;
 }
 
-.edit input[type="submit"]{
+.createUser input[type="submit"]{
     margin:auto;
     width:50%;
     height:10%;

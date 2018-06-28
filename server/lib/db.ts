@@ -1,6 +1,11 @@
 import * as fs from 'fs'
+import * as path from 'path'
 // import {User} from '../models/User';
 // import {Group} from '../models/Group';
+
+
+const baseDir = path.join(__dirname.replace('dist'+path.sep,''));
+
 
 export class DB{
     private myData:any;
@@ -12,13 +17,13 @@ export class DB{
     }
 
     async readFromJson (){
-        let data = await fs.readFileSync(`${__dirname}/db/${this.fileName}.json`);
+        let data = await fs.readFileSync(`${baseDir}/db/${this.fileName}.json`);
         this.myData = JSON.parse(data.toString()||`{"${this.fileName}":[]}`);
         return this.myData;
     }
 
     writeToJson(){
-        fs.writeFileSync(`${__dirname}/db/${this.fileName}.json`, JSON.stringify(this.myData));
+        fs.writeFileSync(`${baseDir}/db/${this.fileName}.json`, JSON.stringify(this.myData));
     }
 
     setMyData(data:any){

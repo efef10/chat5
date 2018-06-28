@@ -44,7 +44,6 @@ class EditGroup extends React.Component<IEditProps,IEditState>{
                 groupId:this.props.location.state.object.id,
                 groupName:this.props.location.state.object.name},async ()=>{
                 let children = await appService.allChildrenOfGroup(this.props.location.state.object.id);
-                debugger;
                 this.setState({list:children});
             });
         }
@@ -77,7 +76,6 @@ class EditGroup extends React.Component<IEditProps,IEditState>{
 
     usersToAdd=async()=>{
         let children = await appService.allChildrenOfGroup(this.state.groupId);
-        debugger;
         let remainingUsers = this.props.users.filter((user)=>{
             let inConditions = true;
             if(children.length === 0){
@@ -90,7 +88,6 @@ class EditGroup extends React.Component<IEditProps,IEditState>{
             }
             return inConditions;
         });
-        debugger;
         this.setState({usersToAdd:remainingUsers})
     };
 

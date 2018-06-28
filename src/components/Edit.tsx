@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {appService} from "../models/AppStore";
+import './Edit.css'
 
 interface IEditProps{
     username:string,
@@ -47,10 +48,10 @@ class Edit extends React.Component<IEditProps,IEditState>{
 
     render(){
         return (
-            <>
-                <p>Edit User: {this.props.location.state.object.id} {this.props.location.state.object.name}</p>
+            <div className="edit">
+                <p>Edit User: {this.props.location.state.object.name}</p>
 
-                <div>
+                <div className="editItem">
                     <label>Age:</label>
                     <input type="text" value={this.state.age} onChange={this.ageChanged} placeholder="Age"/>
                 </div>
@@ -60,13 +61,14 @@ class Edit extends React.Component<IEditProps,IEditState>{
                     {/*<input type="text" value={this.state.profileImg} onChange={this.profileImgChanged} placeholder="Profile Image"/>*/}
                 {/*</div>*/}
 
-               <div>
+               <div className="editItem">
                    <label>Password:</label>
                    <input type="text" value={this.state.password} onChange={this.passwordChanged} placeholder="New Password"/>
                </div>
-
-                <input type="submit" onClick={this.submit} value="save"/>
-            </>
+                <div>
+                    <input type="submit" onClick={this.submit} value="save"/>
+                </div>
+            </div>
         )
     }
 }

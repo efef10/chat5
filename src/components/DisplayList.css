@@ -12,6 +12,15 @@
     padding: 5px 20%;
 }
 
+.displayList .add{
+    background-color: white;
+    font-size:25px;
+    padding:10px;
+    margin:10px 0 0 10px;
+    border-radius: 5px;
+    border:5px solid #25d366;
+}
+
 .displayList p{
     display:inline;
     font-size: 30px;

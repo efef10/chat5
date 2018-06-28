@@ -32,7 +32,7 @@ class CreateGroup extends React.Component<ICreateGroupProps,{}>{
         // const options = ([<option key={1} value="volvo">Volvo</option>]
 
         return(
-            <>
+            <div className="createGroup">
                 <h2>Create a New Group</h2>
             <form onSubmit={this.onSubmit} id="createGroup">
                 <div className="field">
@@ -51,7 +51,7 @@ class CreateGroup extends React.Component<ICreateGroupProps,{}>{
                     <input type="submit" value="save"/>
                 </div>
             </form>
-                </>
+                </div>
         )
     }
 }

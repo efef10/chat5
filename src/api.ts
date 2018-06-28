@@ -94,7 +94,6 @@ export class Api{
     }
 
     static put(url:string,body:object){
-        debugger
         return fetch(Api.baseURL + url,{
             method:"PUT",
             body:JSON.stringify(body),

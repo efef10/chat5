@@ -43,7 +43,6 @@ class TreeComponent extends React.Component<ITreeComponentProps,ITreeComponentSt
         // this.tree.load(this.props.groups);
         // let tree = appService.groupsToDisplay();
         let tree = await appService.getTree();
-        debugger
         this.tree.load(tree);
     }
 

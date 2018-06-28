@@ -1,0 +1,19 @@
+.edit{
+    margin:5px auto;
+}
+
+.editItem{
+    display:flex;
+    flex-direction: row;
+}
+
+.editItem input{
+    width:100%;
+}
+
+.edit input[type="submit"]{
+    margin:auto;
+    width:50%;
+    height:10%;
+    display:block;
+}

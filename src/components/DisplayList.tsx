@@ -2,6 +2,7 @@ import * as React from 'react';
 import {Link} from 'react-router-dom';
 import './DisplayList.css';
 import {appService} from "../models/AppStore";
+const FontAwesome = require('react-fontawesome');
 // import CreateUser from './CreateUser'
 // interface IItem{
 //     name:string,
@@ -45,33 +46,7 @@ class DisplayList extends React.Component<IDisplayListProps,IDisplayListState>{
     calcChildren=(e:any,item:any)=>{
         appService.allChildrenOfGroup(item.id).then((children)=>{
             this.setState({currentChildren:children});
-            // appService.getUsers().then((users)=>{
-            //     let remainingUsers = users.filter((user:any)=>{
-            //         let inConditions = false;
-            //         for(let child of children){
-            //             if(child.type === "user" && child.id !== user.id){
-            //                 inConditions = true;
-            //             }
-            //         }
-            //         return inConditions;
-            //     })
-            //     this.setState({usersToAdd:remainingUsers})
-            // })
         })
-
-
-        // let children = await appService.allChildrenOfGroup(this.state.groupId);
-        // let remainingUsers = this.props.users.filter((user)=>{
-        //     let inConditions = false;
-        //     for(let child of children){
-        //         if(child.type === "user" && child.id !== user.id){
-        //             inConditions = true;
-        //         }
-        //     }
-        //     return inConditions;
-        // })
-        // this.setState({usersToAdd:remainingUsers})
-
 
 
 
@@ -100,7 +75,7 @@ class DisplayList extends React.Component<IDisplayListProps,IDisplayListState>{
         return (
             <div className="displayList">
                 <Link to={`${this.props.type}/new`}>
-                        <button>create new {this.props.type === "users" ? "user" : "group"}</button>
+                        <button className="add">new {this.props.type === "users" ? "user " : "group "}<FontAwesome name='plus'/></button>
                     </Link>
 
 

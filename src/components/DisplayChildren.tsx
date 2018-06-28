@@ -1,5 +1,6 @@
 import * as React from 'react';
 // import {Link} from 'react-router-dom';
+const FontAwesome = require('react-fontawesome');
 import './DisplayChildren.css';
 import {appService} from "../models/AppStore";
 // import CreateUser from './CreateUser'
@@ -81,7 +82,8 @@ class DisplayChildren extends React.Component<IDisplayChildrenProps,IDisplayChil
                         {/*<Link to={{pathname:`/${this.state.list[0].type === "user"?'users':'groups'}/${item.id}`,state:{object:item,children:this.state.currentChildren}}}>*/}
                             {/*<button className="listBtn" onMouseOver={(e)=>{this.calcChildren(e,item)}}>Edit ></button>*/}
                         {/*</Link>*/}
-                        <button className="listBtn" onClick={(e)=>{this.deleteData(e,item)}}>Delete</button>
+                        <FontAwesome name='trash' onClick={(e:any)=>{this.deleteData(e,item)}}/>
+                        {/*<button className="listBtn" onClick={(e)=>{this.deleteData(e,item)}}>Delete</button>*/}
                     </div>
                 </li>
             )
@@ -96,12 +98,19 @@ class DisplayChildren extends React.Component<IDisplayChildrenProps,IDisplayChil
         return (
             <div className="displayChildren">
                 <div className="editingChildren">
-                    <button onClick={this.addUser}>add user to this group</button>
-                    <select name="selectUser" id="selectedGroup" ref={elem=>this.selectUser = elem}>
-                        {options}
-                    </select>
-                    <button onClick={this.submit}>add group to this group</button>
-                    <input ref={elem=>this.groupName = elem} name="groupName" type="text" placeholder="New Group Name"/>
+                    <span>add user:</span>
+                    <div className="chooseChild">
+                        <select name="selectUser" id="selectedGroup" ref={elem=>this.selectUser = elem}>
+                            {options}
+                        </select>
+                        <button onClick={this.addUser}>add</button>
+                    </div>
+                    <br/>
+                    <span>add group:</span>
+                    <div className="chooseChild">
+                        <input ref={elem=>this.groupName = elem} name="groupName" type="text" placeholder="New Group Name"/>
+                        <button onClick={this.submit}>add</button>
+                    </div>
                 </div>
                 <ul>{list}</ul>
             </div>

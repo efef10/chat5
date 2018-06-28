@@ -11,9 +11,9 @@ class CreateUser extends React.Component{
         const username = e.target.elements.username.value;
         const password = e.target.elements.password.value;
         const age = e.target.elements.age.value;
-        const imageUrl = e.target.elements.imageUrl.value;
+        // const imageUrl = e.target.elements.imageUrl.value;
         if(!isNaN(age)){
-            appService.addUser(username,password,Number(age),imageUrl);
+            appService.addUser(username,password,Number(age));
 
         }
     }
@@ -27,8 +27,8 @@ class CreateUser extends React.Component{
                 <input name="password" type="password"/>
                 <span>*</span><label htmlFor="age">Age:</label>
                 <input name="age" type="text"/>
-                <label htmlFor="imageUrl">Image URL:</label>
-                <input name="imageUrl" type="text"/>
+                {/*<label htmlFor="imageUrl">Image URL:</label>*/}
+                {/*<input name="imageUrl" type="text"/>*/}
                 <input type="submit" value="save"/>
             </form>
         )

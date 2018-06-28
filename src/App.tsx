@@ -83,7 +83,6 @@ class App extends React.Component<{},IAppState> {
     async componentDidMount(){
         appService.getUsers();
         await appService.getGroups();
-        debugger
         appService.getTree();
         window.onclick = (event:any)=> {
             if (event.target && !event.target.matches('.dropbtn')) {
@@ -198,7 +197,7 @@ class App extends React.Component<{},IAppState> {
               </div>
 
               <Link to="/"><div className='navElement'>Home</div></Link>
-              {appService.getSelectedGroup()!==""?<Link to={this.generateLink()}><FontAwesome onClick={this.togglePopup} name='user-plus' /></Link>:null}
+              {/*{appService.getSelectedGroup()!==""?<Link to={this.generateLink()}><FontAwesome onClick={this.togglePopup} name='user-plus' /></Link>:null}*/}
               <Link to={appService.getLoggedUser()===""?"/login":"/"}><div id='logIn' onClick={appService.getLoggedUser()===""?this.togglePopup:this.logOut}>{appService.getLoggedUser()===""?"Log In":"Log Out"}</div></Link>
 
           </div>

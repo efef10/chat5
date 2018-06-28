@@ -9,8 +9,8 @@
       "id": "9"
     },
     {
-      "name": "efrat1993",
-      "password": "efrat1993",
+      "name": "efrat93",
+      "password": "efrat93",
       "age": 25,
       "imageUrl": "",
       "type": "user",
@@ -25,6 +25,42 @@
       "type": "user",
       "message": [],
       "id": "a19ap3he4jiwsis0u"
+    },
+    {
+      "name": "bentzi",
+      "password": "",
+      "age": 0,
+      "imageUrl": "",
+      "type": "user",
+      "message": [],
+      "id": "w9no18k0jix51kvf"
+    },
+    {
+      "name": "groot",
+      "password": "",
+      "age": 0,
+      "imageUrl": "",
+      "type": "user",
+      "message": [],
+      "id": "w9no18k0jix51n6x"
+    },
+    {
+      "name": "jhgj",
+      "password": "",
+      "age": 0,
+      "imageUrl": "",
+      "type": "user",
+      "message": [],
+      "id": "w9no18k0jix51p9b"
+    },
+    {
+      "name": "gal",
+      "password": "",
+      "age": 0,
+      "imageUrl": "",
+      "type": "user",
+      "message": [],
+      "id": "w9no18k0jix51r9y"
     }
   ]
 }

@@ -115,7 +115,6 @@ export class AppService {
     }
 
     addGroup(groupName:string,toGroupID:string){
-        debugger
         return Api.addGroup(groupName,toGroupID)
             .then((group)=>{
                 Api.getGroups()
@@ -224,7 +223,6 @@ export class AppService {
 
     async groupWithUsers(groupId:string,userName:string){
         let children = await this.allChildrenOfGroup(groupId);
-        debugger
         if(children.length > 0 && children[0].type === "user"){
             let inGroup = false;
             for (let child of children){
@@ -302,7 +300,6 @@ export class AppService {
     }
 
     getMessages(){
-        debugger
         return this.messages;
     }
 
@@ -330,10 +327,7 @@ export class AppService {
     async auth(userName:string,password:string){
         let res = await Api.authUser(userName,password)
         let auth = res.authSucess;
-
-        debugger
         return auth;
-        // return true;
     }
 
     logOut(){

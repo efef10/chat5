@@ -101,7 +101,6 @@ function TreeChat(element:HTMLElement) {
     }
 
     function load(items:Group[]){
-        debugger
         element.addEventListener("keydown",arrowsKeyboard);
         element.addEventListener("dblclick",showHideGroups);
         element.addEventListener("click",(e:any)=> {
